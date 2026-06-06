@@ -46,8 +46,7 @@ export default function RFQsPage() {
           <Typography variant="h4" sx={{ fontWeight: 800 }}>RFQs</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>Manage Request for Quotations</Typography>
         </Box>
-        <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/rfqs/new')}
-          sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' }}>Create RFQ</Button>
+        <Button variant="contained" color="primary" startIcon={<Add />} onClick={() => navigate('/rfqs/new')}>Create RFQ</Button>
       </Box>
 
       <Tabs value={tab} onChange={(e, v) => { setTab(v); setPage(0); }} sx={{ mb: 3, borderBottom: 1, borderColor: 'divider' }}>

@@ -18,16 +18,17 @@ export default function ForgotPasswordPage() {
   return (
     <Box sx={{
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      bgcolor: '#0a0e17', px: 2,
-      background: 'radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.15) 0%, transparent 60%), #0a0e17',
+      bgcolor: 'background.default', px: 2,
+      background: (t) => `radial-gradient(ellipse at 50% 0%, ${alpha(t.palette.primary.main, 0.12)} 0%, transparent 70%), ${t.palette.background.default}`,
     }}>
       <Card sx={{
         width: '100%', maxWidth: 440, overflow: 'visible',
-        bgcolor: alpha('#0f1520', 0.9), backdropFilter: 'blur(20px)',
-        border: (t) => `1px solid ${alpha(t.palette.divider, 0.5)}`, borderRadius: 4,
+        bgcolor: 'background.paper',
+        border: (t) => `1px solid ${alpha(t.palette.divider, 0.8)}`, borderRadius: 4,
+        boxShadow: (t) => t.shadows[4],
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: -4 }}>
-          <Avatar sx={{ width: 72, height: 72, background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)', boxShadow: '0 8px 24px rgba(139,26,26,0.4)', border: '4px solid #0f1520' }}>
+          <Avatar sx={{ width: 72, height: 72, background: (t) => `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.primary.dark})`, boxShadow: (t) => `0 8px 24px ${alpha(t.palette.primary.main, 0.35)}`, border: (t) => `4px solid ${t.palette.background.paper}` }}>
             <LockResetOutlined sx={{ fontSize: 32 }} />
           </Avatar>
         </Box>
@@ -48,7 +49,7 @@ export default function ForgotPasswordPage() {
                 InputProps={{ startAdornment: <InputAdornment position="start"><Email sx={{ color: 'text.secondary', fontSize: 20 }} /></InputAdornment> }}
               />
               <Button type="submit" fullWidth variant="contained" size="large"
-                sx={{ py: 1.4, borderRadius: 3, background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)', '&:hover': { background: 'linear-gradient(135deg, #9B2D2D, #8B1A1A)' } }}>
+                sx={{ py: 1.4, borderRadius: 3 }}>
                 Send Reset Link
               </Button>
             </Box>

@@ -59,10 +59,10 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box sx={{
               width: 36, height: 36, borderRadius: '10px',
-              background: 'linear-gradient(135deg, #8B1A1A 0%, #5C0A0A 100%)',
+              background: (t) => `linear-gradient(135deg, ${t.palette.primary.main} 0%, ${t.palette.primary.dark} 100%)`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 800, fontSize: '1rem', color: '#fff',
-              boxShadow: '0 4px 12px rgba(139,26,26,0.4)',
+              boxShadow: (t) => `0 4px 12px ${alpha(t.palette.primary.main, 0.35)}`,
             }}>
               VB
             </Box>
@@ -74,9 +74,10 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
         {collapsed && !isMobile && (
           <Box sx={{
             width: 36, height: 36, borderRadius: '10px',
-            background: 'linear-gradient(135deg, #8B1A1A 0%, #5C0A0A 100%)',
+            background: (t) => `linear-gradient(135deg, ${t.palette.primary.main} 0%, ${t.palette.primary.dark} 100%)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontWeight: 800, fontSize: '1rem', color: '#fff',
+            boxShadow: (t) => `0 4px 12px ${alpha(t.palette.primary.main, 0.35)}`,
           }}>
             VB
           </Box>
@@ -105,14 +106,14 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
                   px: collapsed && !isMobile ? 1.5 : 2,
                   justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
                   ...(active && {
-                    bgcolor: (t) => alpha(t.palette.primary.main, 0.15),
-                    '&:hover': { bgcolor: (t) => alpha(t.palette.primary.main, 0.25) },
+                    bgcolor: (t) => alpha(t.palette.primary.main, 0.08),
+                    '&:hover': { bgcolor: (t) => alpha(t.palette.primary.main, 0.12) },
                     '& .MuiListItemIcon-root': { color: 'primary.main' },
-                    '& .MuiListItemText-primary': { color: '#fff', fontWeight: 600 },
+                    '& .MuiListItemText-primary': { color: 'primary.main', fontWeight: 600 },
                     '&::before': {
                       content: '""', position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
                       width: 3, height: 24, borderRadius: 4,
-                      background: 'linear-gradient(135deg, #8B1A1A, #A52A2A)',
+                      bgcolor: 'primary.main',
                     },
                   }),
                 }}

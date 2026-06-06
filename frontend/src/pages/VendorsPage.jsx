@@ -88,8 +88,7 @@ export default function VendorsPage() {
           <Typography variant="h4" sx={{ fontWeight: 800 }}>Vendors</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>Manage your vendor records and relationships</Typography>
         </Box>
-        <Button variant="contained" startIcon={<Add />} onClick={openCreate}
-          sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)', '&:hover': { boxShadow: '0 4px 16px rgba(139,26,26,0.4)' } }}>
+        <Button variant="contained" color="primary" startIcon={<Add />} onClick={openCreate}>
           Add Vendor
         </Button>
       </Box>
@@ -151,8 +150,7 @@ export default function VendorsPage() {
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button onClick={closeDialog} sx={{ color: 'text.secondary' }}>Cancel</Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending}
-            sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' }}>
+          <Button variant="contained" color="primary" onClick={handleSubmit} disabled={createMutation.isPending || updateMutation.isPending}>
             {editVendor ? 'Update' : 'Create'}
           </Button>
         </DialogActions>

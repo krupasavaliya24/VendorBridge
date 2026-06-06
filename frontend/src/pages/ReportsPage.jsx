@@ -11,9 +11,9 @@ import analyticsApi from '../api/analytics';
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <Box sx={{ bgcolor: '#151c2c', border: '1px solid #1e293b', borderRadius: 2, px: 2, py: 1.5 }}>
-      <Typography variant="caption" sx={{ color: '#94a3b8' }}>{label}</Typography>
-      <Typography variant="body2" sx={{ fontWeight: 600, color: '#f1f5f9' }}>₹{payload[0].value?.toLocaleString()}</Typography>
+    <Box sx={{ bgcolor: 'background.paper', border: (t) => `1px solid ${t.palette.divider}`, borderRadius: 2, px: 2, py: 1.5, boxShadow: (t) => t.shadows[2] }}>
+      <Typography variant="caption" sx={{ color: 'text.secondary' }}>{label}</Typography>
+      <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>₹{payload[0].value?.toLocaleString()}</Typography>
     </Box>
   );
 };
@@ -27,7 +27,7 @@ export default function ReportsPage() {
   const vendorData = vendors || [];
 
   const summaryCards = [
-    { title: 'Total Vendors', value: stats?.total_vendors, icon: People, color: '#8B1A1A' },
+    { title: 'Total Vendors', value: stats?.total_vendors, icon: People, color: '#1e40af' },
     { title: 'Active RFQs', value: stats?.active_rfqs, icon: TrendingUp, color: '#3b82f6' },
     { title: 'Total PO Value', value: stats?.total_po_value ? `₹${stats.total_po_value.toLocaleString()}` : '₹0', icon: AttachMoney, color: '#10b981' },
     { title: 'Pending Approvals', value: stats?.pending_approvals, icon: Speed, color: '#f59e0b' },
@@ -72,11 +72,11 @@ export default function ReportsPage() {
               <Box sx={{ height: 320 }}>
                 <ResponsiveContainer>
                   <BarChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                     <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
                     <YAxis stroke="#64748b" fontSize={12} tickFormatter={v => `₹${(v / 1000)}k`} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="spend" fill="#8B1A1A" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="spend" fill="#1e40af" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </Box>

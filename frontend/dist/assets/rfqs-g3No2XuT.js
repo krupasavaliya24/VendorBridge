@@ -1,2 +1,0 @@
-import{Q as e}from"./index-CFBk3AzT.js";const p={getAll:t=>e.get("/rfqs",{params:t}).then(a=>a.data),getById:t=>e.get(`/rfqs/${t}`).then(a=>a.data),create:t=>e.post("/rfqs",t).then(a=>a.data),update:(t,a)=>e.put(`/rfqs/${t}`,a).then(s=>s.data),publish:t=>e.post(`/rfqs/${t}/publish`).then(a=>a.data),close:t=>e.post(`/rfqs/${t}/close`).then(a=>a.data)};export{p as r};
-//# sourceMappingURL=rfqs-g3No2XuT.js.map
