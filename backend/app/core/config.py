@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
 
-    DATABASE_URL: str = "postgresql://postgres:postgres123@localhost:5432/vendorbridge"
+    DATABASE_URL: str = "postgresql://postgres:2001@localhost:5433/vendorbridge"
 
     JWT_SECRET: str = "vendorbridge-super-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"

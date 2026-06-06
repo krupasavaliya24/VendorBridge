@@ -8,20 +8,30 @@ import uuid
 def seed_db():
     db = SessionLocal()
     try:
-        # Check if users already exist
-        if db.query(User).first():
-            print("Database already seeded")
-            return
+        print("Ensuring bootstrap users...")
+        users = [
+            ("admin@vendorbridge.com", "Admin User", UserRole.ADMIN),
+            ("procurement@vendorbridge.com", "Procurement Manager", UserRole.PROCUREMENT_MANAGER),
+            ("vendor@vendorbridge.com", "Vendor User", UserRole.VENDOR),
+            ("approver@vendorbridge.com", "Manager User", UserRole.APPROVER),
+        ]
 
-        print("Seeding database...")
-        admin = User(email="admin@vendorbridge.com", full_name="Admin User", role=UserRole.ADMIN, password_hash=hash_password("password123"))
-        po = User(email="procurement@vendorbridge.com", full_name="Procurement Manager", role=UserRole.PROCUREMENT_MANAGER, password_hash=hash_password("password123"))
-        vendor = User(email="vendor@vendorbridge.com", full_name="Vendor User", role=UserRole.VENDOR, password_hash=hash_password("password123"))
-        approver = User(email="approver@vendorbridge.com", full_name="Manager User", role=UserRole.APPROVER, password_hash=hash_password("password123"))
+        for email, full_name, role in users:
+            user = db.query(User).filter(User.email == email, User.is_deleted == False).first()
+            if user:
+                user.full_name = full_name
+                user.role = role
+                user.is_active = True
+            else:
+                db.add(User(
+                    email=email,
+                    full_name=full_name,
+                    role=role,
+                    password_hash=hash_password("password123"),
+                ))
 
-        db.add_all([admin, po, vendor, approver])
         db.commit()
-        print("Database seeded successfully.")
+        print("Bootstrap users are ready.")
 
     except Exception as e:
         print(f"Error seeding DB: {e}")
