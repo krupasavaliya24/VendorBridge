@@ -9,6 +9,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import rfqsApi from '../api/rfqs';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const STATUS_COLORS = { draft: 'default', open: 'info', closed: 'success', cancelled: 'error' };
 
@@ -16,6 +17,7 @@ export default function RFQDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: rfq, isLoading } = useQuery({
     queryKey: ['rfq', id],
@@ -69,8 +71,9 @@ export default function RFQDetailPage() {
         </Box>
         <Box sx={{ display: 'flex', gap: 1.5 }}>
           {rfq.status === 'draft' && <Button variant="contained" startIcon={<Publish />} onClick={() => publishMutation.mutate()} sx={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>Publish</Button>}
-          {rfq.status === 'open' && <Button variant="contained" startIcon={<Lock />} onClick={() => closeMutation.mutate()} sx={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000' }}>Close RFQ</Button>}
-          {(rfq.status === 'open' || rfq.status === 'closed') && <Button variant="outlined" startIcon={<CompareArrows />} onClick={() => navigate(`/quotations/compare/${id}`)} sx={{ borderColor: '#334155' }}>Compare Quotations</Button>}
+          {rfq.status === 'open' && user?.role !== 'vendor' && <Button variant="contained" startIcon={<Lock />} onClick={() => closeMutation.mutate()} sx={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000' }}>Close RFQ</Button>}
+          {rfq.status === 'open' && user?.role === 'vendor' && <Button variant="contained" onClick={() => navigate(`/quotations/submit/${id}`)} sx={{ background: 'linear-gradient(135deg, #3b82f6, #2563eb)' }}>Submit Quotation</Button>}
+          {(rfq.status === 'open' || rfq.status === 'closed') && user?.role !== 'vendor' && <Button variant="outlined" startIcon={<CompareArrows />} onClick={() => navigate(`/quotations/compare/${id}`)} sx={{ borderColor: '#334155' }}>Compare Quotations</Button>}
         </Box>
       </Box>
 

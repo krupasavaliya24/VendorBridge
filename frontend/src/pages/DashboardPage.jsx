@@ -94,9 +94,9 @@ export default function DashboardPage() {
 
       {/* Stat Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        {STAT_CARDS.map(card => (
-          <Grid item xs={12} sm={6} md={3} key={card.key}>
-            <StatCard {...card} value={stats?.[card.key]} loading={isLoading} />
+        {STAT_CARDS.map(({ key, ...card }) => (
+          <Grid item xs={12} sm={6} md={3} key={key}>
+            <StatCard {...card} value={stats?.[key]} loading={isLoading} />
           </Grid>
         ))}
       </Grid>

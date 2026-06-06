@@ -17,22 +17,22 @@ def get_notifications(
     user=Depends(get_current_user)
 ):
     service = NotificationService(db)
-    query = service.get_user_notifications(user.id)
+    query = service.get_user_notifications(user["id"])
     return paginate(query, page, size)
 
 @router.get("/unread-count")
 def get_unread_count(db: Session = Depends(get_db), user=Depends(get_current_user)):
     service = NotificationService(db)
-    count = service.get_unread_count(user.id)
+    count = service.get_unread_count(user["id"])
     return {"count": count}
 
 @router.put("/{id}/read", response_model=NotificationResponse)
 def mark_as_read(id: UUID, db: Session = Depends(get_db), user=Depends(get_current_user)):
     service = NotificationService(db)
-    return service.mark_as_read(id, user.id)
+    return service.mark_as_read(id, user["id"])
 
 @router.put("/read-all")
 def mark_all_as_read(db: Session = Depends(get_db), user=Depends(get_current_user)):
     service = NotificationService(db)
-    service.mark_all_as_read(user.id)
+    service.mark_all_as_read(user["id"])
     return {"success": True}
