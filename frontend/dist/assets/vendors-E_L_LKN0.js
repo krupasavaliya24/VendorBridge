@@ -1,0 +1,2 @@
+import{c as d,j as n,Q as a}from"./index-CFBk3AzT.js";const r=d(n.jsx("path",{d:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"}),"Delete"),h={getAll:e=>a.get("/vendors",{params:e}).then(t=>t.data),getById:e=>a.get(`/vendors/${e}`).then(t=>t.data),create:e=>a.post("/vendors",e).then(t=>t.data),update:(e,t)=>a.put(`/vendors/${e}`,t).then(s=>s.data),delete:e=>a.delete(`/vendors/${e}`).then(t=>t.data)};export{r as D,h as v};
+//# sourceMappingURL=vendors-E_L_LKN0.js.map
