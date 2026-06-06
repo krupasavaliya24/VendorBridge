@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Typography, Chip, MenuItem, TextField, alpha } from '@mui/material';
+import { Box, Typography, Chip, MenuItem, TextField, alpha, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useQuery } from '@tanstack/react-query';
+import { Receipt } from '@mui/icons-material';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import purchaseOrdersApi from '../api/purchaseOrders';
+import invoicesApi from '../api/invoices';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const STATUSES = ['draft', 'issued', 'acknowledged', 'in_progress', 'delivered', 'completed', 'cancelled'];
 const STATUS_COLORS = { draft: 'default', issued: 'info', acknowledged: 'primary', in_progress: 'warning', delivered: 'success', completed: 'success', cancelled: 'error' };
 
 export default function PurchaseOrdersPage() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [statusFilter, setStatusFilter] = useState('');
@@ -16,6 +21,15 @@ export default function PurchaseOrdersPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['purchase-orders', page + 1, pageSize, statusFilter],
     queryFn: () => purchaseOrdersApi.getAll({ page: page + 1, page_size: pageSize, status: statusFilter || undefined }),
+  });
+
+  const invoiceMutation = useMutation({
+    mutationFn: invoicesApi.generate,
+    onSuccess: (invoice) => {
+      toast.success('Invoice generated');
+      navigate(`/invoices/${invoice.id}`);
+    },
+    onError: (e) => toast.error(e.response?.data?.detail || 'Failed to generate invoice'),
   });
 
   const columns = [
@@ -27,6 +41,14 @@ export default function PurchaseOrdersPage() {
     { field: 'status', headerName: 'Status', width: 140, renderCell: (p) => <Chip label={p.value?.replace('_', ' ')} size="small" color={STATUS_COLORS[p.value] || 'default'} sx={{ fontWeight: 500, textTransform: 'capitalize', fontSize: '0.72rem' }} /> },
     { field: 'issued_at', headerName: 'Issued', width: 130, renderCell: (p) => p.value ? format(new Date(p.value), 'dd MMM yyyy') : '—' },
     { field: 'created_on', headerName: 'Created', width: 130, renderCell: (p) => format(new Date(p.value), 'dd MMM yyyy') },
+    {
+      field: 'actions', headerName: 'Actions', width: 120, sortable: false,
+      renderCell: (p) => (
+        <IconButton size="small" title="Generate invoice" onClick={() => invoiceMutation.mutate(p.row.id)} sx={{ color: 'primary.main' }}>
+          <Receipt fontSize="small" />
+        </IconButton>
+      ),
+    },
   ];
 
   return (

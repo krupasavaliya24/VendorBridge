@@ -5,10 +5,10 @@ from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
 
 # Import all models to ensure Alembic/SQLAlchemy knows about them before create_all
-from app.modules.auth.models import User
+from app.modules.auth.models import User, PasswordResetToken
 from app.modules.settings.models import GeneralSetting
 from app.modules.vendors.models import Vendor
-from app.modules.rfqs.models import RFQ, RFQItem, RFQVendor
+from app.modules.rfqs.models import RFQ, RFQItem, RFQVendor, RFQAttachment
 from app.modules.quotations.models import Quotation, QuotationItem
 from app.modules.approvals.models import ApprovalRequest
 from app.modules.purchase_orders.models import PurchaseOrder
@@ -29,7 +29,7 @@ from app.modules.notifications.router import router as notifications_router
 from app.modules.activity_logs.router import router as activity_logs_router
 from app.modules.analytics.router import router as analytics_router
 
-# Create tables (for hackathon/demo purposes. Use Alembic in real prod)
+# Ensure tables exist for the local application database.
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="VendorBridge ERP API")

@@ -25,6 +25,7 @@ class RFQ(BaseEntity):
     # Relationships
     items = relationship("RFQItem", back_populates="rfq", lazy="joined")
     vendors = relationship("RFQVendor", back_populates="rfq", lazy="joined")
+    attachments = relationship("RFQAttachment", back_populates="rfq", lazy="joined")
 
 
 class RFQItem(BaseEntity):
@@ -51,3 +52,15 @@ class RFQVendor(BaseEntity):
 
     # Relationships
     rfq = relationship("RFQ", back_populates="vendors")
+
+
+class RFQAttachment(BaseEntity):
+    __tablename__ = "rfq_attachments"
+
+    rfq_id = Column(UUID(as_uuid=True), ForeignKey("rfqs.id"), nullable=False, index=True)
+    file_name = Column(String(255), nullable=False)
+    stored_path = Column(String(1000), nullable=False)
+    content_type = Column(String(255), nullable=True)
+    size_bytes = Column(Integer, nullable=False, default=0)
+
+    rfq = relationship("RFQ", back_populates="attachments")

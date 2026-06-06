@@ -3,7 +3,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session, Query
 
-from app.modules.rfqs.models import RFQ, RFQItem, RFQVendor
+from app.modules.rfqs.models import RFQ, RFQItem, RFQVendor, RFQAttachment
 from app.shared.enums import RFQStatus
 
 
@@ -67,3 +67,16 @@ class RFQRepository:
             RFQItem.rfq_id == rfq_id,
             RFQItem.is_deleted == False,
         ).all()
+
+    def add_attachment(self, attachment: RFQAttachment) -> RFQAttachment:
+        self.db.add(attachment)
+        self.db.commit()
+        self.db.refresh(attachment)
+        return attachment
+
+    def get_attachment(self, rfq_id: UUID, attachment_id: UUID) -> Optional[RFQAttachment]:
+        return self.db.query(RFQAttachment).filter(
+            RFQAttachment.rfq_id == rfq_id,
+            RFQAttachment.id == attachment_id,
+            RFQAttachment.is_deleted == False,
+        ).first()

@@ -4,7 +4,7 @@ import {
   Box, Typography, Button, Card, CardContent, Grid, Chip, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, CircularProgress, Divider, alpha
 } from '@mui/material';
-import { ArrowBack, Publish, Lock, CompareArrows } from '@mui/icons-material';
+import { ArrowBack, Publish, Lock, CompareArrows, AttachFile, Download } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import rfqsApi from '../api/rfqs';
 import { format } from 'date-fns';
@@ -33,6 +33,21 @@ export default function RFQDetailPage() {
     onSuccess: () => { toast.success('RFQ closed'); queryClient.invalidateQueries({ queryKey: ['rfq', id] }); },
     onError: (e) => toast.error(e.response?.data?.detail || 'Failed to close'),
   });
+
+  const downloadAttachment = async (file) => {
+    try {
+      const response = await rfqsApi.downloadAttachment(rfq.id, file.id);
+      const blob = new Blob([response.data], { type: file.content_type || 'application/octet-stream' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.file_name;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      toast.error('Failed to download attachment');
+    }
+  };
 
   if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}><CircularProgress /></Box>;
   if (!rfq) return <Typography color="error">RFQ not found</Typography>;
@@ -70,6 +85,26 @@ export default function RFQDetailPage() {
                 <Grid item xs={6} sm={3}><Typography variant="overline" sx={{ color: 'text.secondary' }}>Created</Typography><Typography sx={{ fontWeight: 500 }}>{format(new Date(rfq.created_on), 'dd MMM yyyy')}</Typography></Grid>
               </Grid>
               {rfq.description && <><Divider sx={{ my: 2 }} /><Typography variant="body2" sx={{ color: 'text.secondary' }}>{rfq.description}</Typography></>}
+              {rfq.attachments?.length > 0 && (
+                <>
+                  <Divider sx={{ my: 2 }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>Attachments</Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {rfq.attachments.map(file => (
+                      <Button
+                        key={file.id}
+                        size="small"
+                        variant="outlined"
+                        startIcon={<AttachFile />}
+                        endIcon={<Download />}
+                        onClick={() => downloadAttachment(file)}
+                      >
+                        {file.file_name}
+                      </Button>
+                    ))}
+                  </Box>
+                </>
+              )}
             </CardContent>
           </Card>
 

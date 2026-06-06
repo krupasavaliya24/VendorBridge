@@ -4,6 +4,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import NotFoundError, ConflictError
+from app.modules.activity_logs.service import ActivityLogService
 from app.modules.vendors.models import Vendor
 from app.modules.vendors.repository import VendorRepository
 from app.modules.vendors.schemas import VendorCreateRequest, VendorUpdateRequest
@@ -42,7 +43,15 @@ class VendorService:
             rating=data.rating or 0.0,
             created_by=current_user_id,
         )
-        return self.repo.create(vendor)
+        vendor = self.repo.create(vendor)
+        ActivityLogService(self.db).log_action(
+            entity_type="vendor",
+            entity_id=vendor.id,
+            action="vendor_created",
+            performed_by=current_user_id,
+            new_values={"vendor_code": vendor.vendor_code, "name": vendor.name, "status": vendor.status.value},
+        )
+        return vendor
 
     def get_vendor(self, vendor_id: UUID) -> Vendor:
         vendor = self.repo.get_by_id(vendor_id)
@@ -69,9 +78,24 @@ class VendorService:
             setattr(vendor, field, value)
 
         vendor.updated_by = current_user_id
-        return self.repo.update(vendor)
+        vendor = self.repo.update(vendor)
+        ActivityLogService(self.db).log_action(
+            entity_type="vendor",
+            entity_id=vendor.id,
+            action="vendor_updated",
+            performed_by=current_user_id,
+            new_values={key: str(value) for key, value in update_data.items()},
+        )
+        return vendor
 
     def delete_vendor(self, vendor_id: UUID, current_user_id: UUID = None) -> Vendor:
         vendor = self.get_vendor(vendor_id)
         vendor.updated_by = current_user_id
-        return self.repo.soft_delete(vendor)
+        vendor = self.repo.soft_delete(vendor)
+        ActivityLogService(self.db).log_action(
+            entity_type="vendor",
+            entity_id=vendor.id,
+            action="vendor_deleted",
+            performed_by=current_user_id,
+        )
+        return vendor

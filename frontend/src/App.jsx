@@ -9,7 +9,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignupPage = lazy(() => import('./pages/SignupPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const UsersPage = lazy(() => import('./pages/UsersPage'));
 const VendorsPage = lazy(() => import('./pages/VendorsPage'));
 const RFQsPage = lazy(() => import('./pages/RFQsPage'));
 const RFQCreatePage = lazy(() => import('./pages/RFQCreatePage'));
@@ -61,10 +63,12 @@ export default function App() {
         <Route path="/login" element={<SuspenseWrap><LoginPage /></SuspenseWrap>} />
         <Route path="/signup" element={<SuspenseWrap><SignupPage /></SuspenseWrap>} />
         <Route path="/forgot-password" element={<SuspenseWrap><ForgotPasswordPage /></SuspenseWrap>} />
+        <Route path="/reset-password" element={<SuspenseWrap><ResetPasswordPage /></SuspenseWrap>} />
 
         {/* Protected Routes with Layout */}
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<Protected><DashboardPage /></Protected>} />
+          <Route path="users" element={<Protected roles={['admin']}><UsersPage /></Protected>} />
           <Route path="vendors" element={<Protected roles={['admin', 'procurement_manager']}><VendorsPage /></Protected>} />
           <Route path="rfqs" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><RFQsPage /></Protected>} />
           <Route path="rfqs/new" element={<Protected roles={['admin', 'procurement_manager']}><RFQCreatePage /></Protected>} />

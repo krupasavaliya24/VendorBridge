@@ -15,7 +15,7 @@ def seed_db():
 
         print("Seeding database...")
         admin = User(email="admin@vendorbridge.com", full_name="Admin User", role=UserRole.ADMIN, password_hash=hash_password("password123"))
-        po = User(email="procurement@vendorbridge.com", full_name="PO User", role=UserRole.PROCUREMENT_OFFICER, password_hash=hash_password("password123"))
+        po = User(email="procurement@vendorbridge.com", full_name="Procurement Manager", role=UserRole.PROCUREMENT_MANAGER, password_hash=hash_password("password123"))
         vendor = User(email="vendor@vendorbridge.com", full_name="Vendor User", role=UserRole.VENDOR, password_hash=hash_password("password123"))
         approver = User(email="approver@vendorbridge.com", full_name="Manager User", role=UserRole.APPROVER, password_hash=hash_password("password123"))
 

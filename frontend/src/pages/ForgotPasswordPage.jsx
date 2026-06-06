@@ -3,16 +3,26 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Card, CardContent, TextField, Button, Typography, Link, Avatar, Alert, alpha } from '@mui/material';
 import { LockResetOutlined, Email } from '@mui/icons-material';
 import { InputAdornment } from '@mui/material';
+import authApi from '../api/auth';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !/\S+@\S+\.\S+/.test(email)) { setError('Please enter a valid email'); return; }
-    setSent(true);
+    setLoading(true);
+    try {
+      await authApi.forgotPassword(email);
+      setSent(true);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Unable to send reset email right now');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,9 +58,9 @@ export default function ForgotPasswordPage() {
                 error={!!error} helperText={error}
                 InputProps={{ startAdornment: <InputAdornment position="start"><Email sx={{ color: 'text.secondary', fontSize: 20 }} /></InputAdornment> }}
               />
-              <Button type="submit" fullWidth variant="contained" size="large"
+              <Button type="submit" fullWidth variant="contained" size="large" disabled={loading}
                 sx={{ py: 1.4, borderRadius: 3 }}>
-                Send Reset Link
+                {loading ? 'Sending...' : 'Send Reset Link'}
               </Button>
             </Box>
           )}

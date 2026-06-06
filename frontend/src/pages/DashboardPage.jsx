@@ -65,10 +65,7 @@ export default function DashboardPage() {
     retry: false,
   });
 
-  const trendData = trends || [
-    { month: 'Jan', spend: 45000 }, { month: 'Feb', spend: 52000 }, { month: 'Mar', spend: 48000 },
-    { month: 'Apr', spend: 61000 }, { month: 'May', spend: 55000 }, { month: 'Jun', spend: 67000 },
-  ];
+  const trendData = trends || [];
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';

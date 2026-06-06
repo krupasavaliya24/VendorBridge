@@ -5,7 +5,7 @@ import {
   Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Checkbox, Chip, CircularProgress, alpha
 } from '@mui/material';
-import { Add, Delete, ArrowBack, ArrowForward, Send } from '@mui/icons-material';
+import { Add, Delete, ArrowBack, ArrowForward, Send, AttachFile, Close } from '@mui/icons-material';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import rfqsApi from '../api/rfqs';
 import vendorsApi from '../api/vendors';
@@ -20,6 +20,7 @@ export default function RFQCreatePage() {
   const [form, setForm] = useState({ title: '', description: '', deadline: '' });
   const [items, setItems] = useState([{ ...emptyItem }]);
   const [selectedVendors, setSelectedVendors] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [errors, setErrors] = useState({});
 
   const { data: vendorsData } = useQuery({
@@ -28,7 +29,13 @@ export default function RFQCreatePage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: rfqsApi.create,
+    mutationFn: async (payload) => {
+      const rfq = await rfqsApi.create(payload);
+      for (const file of attachments) {
+        await rfqsApi.uploadAttachment(rfq.id, file);
+      }
+      return rfq;
+    },
     onSuccess: () => { toast.success('RFQ created successfully!'); navigate('/rfqs'); },
     onError: (e) => toast.error(e.response?.data?.detail || 'Failed to create RFQ'),
   });
@@ -65,6 +72,8 @@ export default function RFQCreatePage() {
   const addItem = () => setItems([...items, { ...emptyItem }]);
   const removeItem = (i) => setItems(items.filter((_, idx) => idx !== i));
   const updateItem = (i, field, value) => { const n = [...items]; n[i] = { ...n[i], [field]: value }; setItems(n); };
+  const addAttachments = (files) => setAttachments(prev => [...prev, ...Array.from(files || [])]);
+  const removeAttachment = (index) => setAttachments(prev => prev.filter((_, i) => i !== index));
 
   const vendors = vendorsData?.items || [];
 
@@ -90,6 +99,19 @@ export default function RFQCreatePage() {
               <Grid item xs={12}><TextField fullWidth label="RFQ Title *" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} error={!!errors.title} helperText={errors.title} /></Grid>
               <Grid item xs={12}><TextField fullWidth label="Description" multiline rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Grid>
               <Grid item xs={12} sm={6}><TextField fullWidth label="Deadline" type="datetime-local" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} InputLabelProps={{ shrink: true }} /></Grid>
+              <Grid item xs={12}>
+                <Button component="label" variant="outlined" startIcon={<AttachFile />}>
+                  Add Attachments
+                  <input hidden multiple type="file" onChange={(e) => { addAttachments(e.target.files); e.target.value = ''; }} />
+                </Button>
+                {attachments.length > 0 && (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.5 }}>
+                    {attachments.map((file, i) => (
+                      <Chip key={`${file.name}-${i}`} label={file.name} size="small" onDelete={() => removeAttachment(i)} deleteIcon={<Close />} />
+                    ))}
+                  </Box>
+                )}
+              </Grid>
             </Grid>
           )}
 
@@ -155,6 +177,9 @@ export default function RFQCreatePage() {
                 </Grid>
                 <Grid item xs={12}><Typography variant="overline" sx={{ color: 'text.secondary' }}>Vendors ({selectedVendors.length})</Typography>
                   {vendors.filter(v => selectedVendors.includes(v.id)).map(v => <Chip key={v.id} label={v.name} size="small" sx={{ mr: 1, mt: 0.5 }} />)}
+                </Grid>
+                <Grid item xs={12}><Typography variant="overline" sx={{ color: 'text.secondary' }}>Attachments ({attachments.length})</Typography>
+                  {attachments.length === 0 ? <Typography sx={{ fontWeight: 500 }}>None</Typography> : attachments.map((file, i) => <Chip key={`${file.name}-${i}`} label={file.name} size="small" sx={{ mr: 1, mt: 0.5 }} />)}
                 </Grid>
               </Grid>
             </Box>

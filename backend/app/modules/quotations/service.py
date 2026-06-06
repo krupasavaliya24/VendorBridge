@@ -4,6 +4,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import NotFoundError, ValidationError
+from app.modules.activity_logs.service import ActivityLogService
 from app.modules.quotations.models import Quotation, QuotationItem
 from app.modules.quotations.repository import QuotationRepository
 from app.modules.quotations.schemas import QuotationCreateRequest
@@ -69,6 +70,13 @@ class QuotationService:
 
         self.db.commit()
         self.db.refresh(quotation)
+        ActivityLogService(self.db).log_action(
+            entity_type="quotation",
+            entity_id=quotation.id,
+            action="quotation_submitted",
+            performed_by=current_user_id,
+            new_values={"quotation_number": quotation.quotation_number, "rfq_id": str(data.rfq_id), "vendor_id": str(data.vendor_id)},
+        )
         return quotation
 
     def get_quotation(self, quotation_id: UUID) -> Quotation:
@@ -139,6 +147,13 @@ class QuotationService:
 
         self.db.commit()
         self.db.refresh(quotation)
+        ActivityLogService(self.db).log_action(
+            entity_type="quotation",
+            entity_id=quotation.id,
+            action="quotation_selected",
+            performed_by=current_user_id,
+            new_values={"quotation_number": quotation.quotation_number, "status": quotation.status.value},
+        )
         return quotation
 
     def _calculate_vendor_score(self, total_amount: float, delivery_days: int, vendor_rating: float) -> float:

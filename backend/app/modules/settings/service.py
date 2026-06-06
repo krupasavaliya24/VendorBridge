@@ -8,6 +8,20 @@ from app.modules.settings.repository import SettingsRepository
 from app.modules.settings.schemas import SettingUpdateRequest, BulkSettingUpdateRequest, SettingCreateRequest
 
 
+DEFAULT_SETTINGS = [
+    ("company_name", "VendorBridge", "Company name shown on generated documents.", "general"),
+    ("frontend_base_url", "http://localhost:3000", "Public frontend URL used in email links.", "general"),
+    ("smtp_host", "", "SMTP server host for transactional email.", "smtp"),
+    ("smtp_port", "587", "SMTP server port.", "smtp"),
+    ("smtp_username", "", "SMTP username, if authentication is required.", "smtp"),
+    ("smtp_password", "", "SMTP password, if authentication is required.", "smtp"),
+    ("smtp_from_email", "", "Sender email address for outgoing mail.", "smtp"),
+    ("smtp_sender_name", "VendorBridge", "Sender display name for outgoing mail.", "smtp"),
+    ("smtp_use_tls", "true", "Use STARTTLS when sending email.", "smtp"),
+    ("notification_poll_seconds", "30", "Frontend notification refresh interval in seconds.", "notifications"),
+]
+
+
 class SettingsService:
     """Business logic for settings management."""
 
@@ -16,6 +30,7 @@ class SettingsService:
         self.repo = SettingsRepository(db)
 
     def get_all(self, category: Optional[str] = None) -> List[GeneralSetting]:
+        self.ensure_defaults()
         return self.repo.get_all(category=category)
 
     def get_by_key(self, key: str) -> GeneralSetting:
@@ -78,3 +93,8 @@ class SettingsService:
             setting = self.repo.get_by_key(key)
             result[key] = setting.value if setting else None
         return result
+
+    def ensure_defaults(self) -> None:
+        for key, value, description, category in DEFAULT_SETTINGS:
+            if not self.repo.get_by_key(key):
+                self.repo.create_or_update(key, value, description=description, category=category)

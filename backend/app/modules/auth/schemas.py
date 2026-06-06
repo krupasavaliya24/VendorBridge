@@ -23,6 +23,15 @@ class RefreshRequest(BaseModel):
     refresh_token: str
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(..., min_length=20, max_length=255)
+    password: str = Field(..., min_length=6, max_length=128)
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
@@ -51,3 +60,9 @@ class UserListResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserUpdateRequest(BaseModel):
+    full_name: Optional[str] = Field(None, min_length=1, max_length=255)
+    role: Optional[UserRole] = None
+    is_active: Optional[bool] = None

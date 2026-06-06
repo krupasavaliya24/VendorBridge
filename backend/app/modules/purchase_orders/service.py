@@ -5,6 +5,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import NotFoundError, ValidationError
+from app.modules.activity_logs.service import ActivityLogService
 from app.modules.purchase_orders.models import PurchaseOrder
 from app.modules.purchase_orders.repository import PurchaseOrderRepository
 from app.modules.purchase_orders.schemas import POStatusUpdateRequest
@@ -54,7 +55,15 @@ class PurchaseOrderService:
             issued_at=datetime.utcnow(),
             created_by=current_user_id,
         )
-        return self.repo.create(po)
+        po = self.repo.create(po)
+        ActivityLogService(self.db).log_action(
+            entity_type="purchase_order",
+            entity_id=po.id,
+            action="purchase_order_created",
+            performed_by=current_user_id,
+            new_values={"po_number": po.po_number, "quotation_id": str(quotation_id)},
+        )
+        return po
 
     def get_po(self, po_id: UUID) -> PurchaseOrder:
         po = self.repo.get_by_id(po_id)
@@ -74,10 +83,20 @@ class PurchaseOrderService:
 
     def update_status(self, po_id: UUID, data: POStatusUpdateRequest, current_user_id: UUID = None) -> PurchaseOrder:
         po = self.get_po(po_id)
+        old_status = po.status.value
         po.status = data.status
         po.updated_by = current_user_id
 
         if data.status == POStatus.ISSUED and not po.issued_at:
             po.issued_at = datetime.utcnow()
 
-        return self.repo.update(po)
+        po = self.repo.update(po)
+        ActivityLogService(self.db).log_action(
+            entity_type="purchase_order",
+            entity_id=po.id,
+            action="purchase_order_status_updated",
+            performed_by=current_user_id,
+            old_values={"status": old_status},
+            new_values={"status": po.status.value},
+        )
+        return po

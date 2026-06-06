@@ -41,6 +41,19 @@ class RFQVendorResponse(BaseModel):
         from_attributes = True
 
 
+class RFQAttachmentResponse(BaseModel):
+    id: UUID
+    rfq_id: UUID
+    file_name: str
+    content_type: Optional[str] = None
+    size_bytes: int
+    created_by: Optional[UUID] = None
+    created_on: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class RFQCreateRequest(BaseModel):
     title: str = Field(..., min_length=1, max_length=500)
     description: Optional[str] = None
@@ -85,6 +98,7 @@ class RFQDetailResponse(BaseModel):
     updated_on: datetime
     items: List[RFQItemResponse] = []
     vendors: List[RFQVendorResponse] = []
+    attachments: List[RFQAttachmentResponse] = []
 
     class Config:
         from_attributes = True

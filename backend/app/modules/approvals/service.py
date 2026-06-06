@@ -9,6 +9,10 @@ from app.core.events import EventBus, ApprovalApprovedEvent
 from app.modules.approvals.models import ApprovalRequest
 from app.modules.approvals.repository import ApprovalRepository
 from app.modules.approvals.schemas import ApprovalCreateRequest, ApprovalDecideRequest
+from app.modules.activity_logs.service import ActivityLogService
+from app.modules.notifications.schemas import NotificationCreate
+from app.modules.notifications.service import NotificationService
+from app.modules.purchase_orders.service import PurchaseOrderService
 from app.shared.enums import ApprovalStatus
 from app.shared.pagination import paginate
 
@@ -33,7 +37,22 @@ class ApprovalService:
             status=ApprovalStatus.PENDING,
             created_by=current_user_id,
         )
-        return self.repo.create(approval)
+        approval = self.repo.create(approval)
+        ActivityLogService(self.db).log_action(
+            entity_type="approval",
+            entity_id=approval.id,
+            action="approval_requested",
+            performed_by=current_user_id,
+            new_values={"quotation_id": str(data.quotation_id), "approver_id": str(data.approver_id)},
+        )
+        NotificationService(self.db).create_notification(NotificationCreate(
+            user_id=data.approver_id,
+            title="Approval requested",
+            message="A procurement quotation is waiting for your decision.",
+            type="approval_request",
+            link="/approvals",
+        ))
+        return approval
 
     def get_approval(self, approval_id: UUID) -> ApprovalRequest:
         approval = self.repo.get_by_id(approval_id)
@@ -70,8 +89,27 @@ class ApprovalService:
         self.db.commit()
         self.db.refresh(approval)
 
-        # Fire event if approved
+        ActivityLogService(self.db).log_action(
+            entity_type="approval",
+            entity_id=approval.id,
+            action=f"approval_{data.status.value}",
+            performed_by=current_user_id,
+            new_values={"status": data.status.value, "remarks": data.remarks},
+        )
+        if approval.requested_by:
+            NotificationService(self.db).create_notification(NotificationCreate(
+                user_id=approval.requested_by,
+                title=f"Approval {data.status.value}",
+                message=f"Your procurement approval request was {data.status.value}.",
+                type="approval_decided",
+                link="/approvals",
+            ))
+
         if data.status == ApprovalStatus.APPROVED:
+            PurchaseOrderService(self.db).create_po_from_quotation(
+                approval.quotation_id,
+                current_user_id=current_user_id,
+            )
             event = ApprovalApprovedEvent(
                 approval_id=approval.id,
                 quotation_id=approval.quotation_id,

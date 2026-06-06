@@ -15,6 +15,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import NotFoundError, ValidationError
+from app.modules.activity_logs.service import ActivityLogService
 from app.modules.invoices.models import Invoice
 from app.modules.invoices.repository import InvoiceRepository
 from app.modules.purchase_orders.repository import PurchaseOrderRepository
@@ -64,7 +65,15 @@ class InvoiceService:
             due_date=datetime.utcnow() + timedelta(days=30),
             created_by=current_user_id,
         )
-        return self.repo.create(invoice)
+        invoice = self.repo.create(invoice)
+        ActivityLogService(self.db).log_action(
+            entity_type="invoice",
+            entity_id=invoice.id,
+            action="invoice_generated",
+            performed_by=current_user_id,
+            new_values={"invoice_number": invoice.invoice_number, "po_id": str(po_id)},
+        )
+        return invoice
 
     def get_invoice(self, invoice_id: UUID) -> Invoice:
         invoice = self.repo.get_by_id(invoice_id)
@@ -86,7 +95,15 @@ class InvoiceService:
         invoice.status = InvoiceStatus.PAID
         invoice.paid_at = datetime.utcnow()
         invoice.updated_by = current_user_id
-        return self.repo.update(invoice)
+        invoice = self.repo.update(invoice)
+        ActivityLogService(self.db).log_action(
+            entity_type="invoice",
+            entity_id=invoice.id,
+            action="invoice_marked_paid",
+            performed_by=current_user_id,
+            new_values={"status": invoice.status.value},
+        )
+        return invoice
 
     def generate_pdf(self, invoice_id: UUID) -> bytes:
         """Generate a professional PDF for the invoice using ReportLab."""
@@ -181,7 +198,7 @@ class InvoiceService:
         doc.build(elements)
         return buffer.getvalue()
 
-    def send_email(self, invoice_id: UUID, recipient_email: str) -> dict:
+    def send_email(self, invoice_id: UUID, recipient_email: str, current_user_id: UUID = None) -> dict:
         """Send invoice PDF via email using SMTP settings from database."""
         invoice = self.get_invoice(invoice_id)
 
@@ -240,6 +257,13 @@ VendorBridge ERP
             # Update invoice status
             invoice.status = InvoiceStatus.SENT
             self.db.commit()
+            ActivityLogService(self.db).log_action(
+                entity_type="invoice",
+                entity_id=invoice.id,
+                action="invoice_sent_email",
+                performed_by=current_user_id,
+                new_values={"recipient_email": recipient_email, "status": invoice.status.value},
+            )
 
             return {"message": f"Invoice {invoice.invoice_number} sent to {recipient_email} successfully."}
         except Exception as e:

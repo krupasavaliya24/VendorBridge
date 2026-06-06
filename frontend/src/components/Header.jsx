@@ -15,6 +15,7 @@ import notificationsApi from '../api/notifications';
 
 const ROUTE_TITLES = {
   '/': 'Dashboard',
+  '/users': 'Users',
   '/vendors': 'Vendors',
   '/rfqs': 'RFQs',
   '/rfqs/new': 'Create RFQ',

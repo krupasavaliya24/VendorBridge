@@ -15,6 +15,7 @@ import {
   Timeline as TimelineIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
+  ManageAccounts as ManageAccountsIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
 } from '@mui/icons-material';
@@ -22,6 +23,7 @@ import { useAuth } from '../hooks/useAuth';
 
 const MENU_ITEMS = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/', roles: ['admin', 'procurement_manager', 'vendor', 'approver'] },
+  { text: 'Users', icon: <ManageAccountsIcon />, path: '/users', roles: ['admin'] },
   { text: 'Vendors', icon: <PeopleIcon />, path: '/vendors', roles: ['admin', 'procurement_manager'] },
   { text: 'RFQs', icon: <DescriptionIcon />, path: '/rfqs', roles: ['admin', 'procurement_manager', 'vendor'] },
   { text: 'Quotations', icon: <AssignmentIcon />, path: '/quotations', roles: ['admin', 'procurement_manager', 'vendor'] },

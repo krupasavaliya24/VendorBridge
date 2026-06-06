@@ -2,14 +2,15 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box, Typography, Button, Card, CardContent, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, CircularProgress, Chip, alpha, Grid
+  TableHead, TableRow, CircularProgress, Chip, alpha, Grid, Dialog, DialogTitle, DialogContent,
+  DialogActions, TextField, MenuItem
 } from '@mui/material';
 import { ArrowBack, CheckCircle, Gavel } from '@mui/icons-material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import quotationsApi from '../api/quotations';
 import approvalsApi from '../api/approvals';
-import { useAuth } from '../hooks/useAuth';
+import usersApi from '../api/users';
 import toast from 'react-hot-toast';
 
 const COLORS = ['#1e40af', '#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#ec4899'];
@@ -17,12 +18,17 @@ const COLORS = ['#1e40af', '#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#ec4899'
 export default function QuotationComparePage() {
   const { rfqId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [approvalDialog, setApprovalDialog] = React.useState({ open: false, quotationId: null, approverId: '' });
 
   const { data, isLoading } = useQuery({
     queryKey: ['quotation-compare', rfqId],
     queryFn: () => quotationsApi.compare(rfqId),
+  });
+
+  const { data: users } = useQuery({
+    queryKey: ['approval-users'],
+    queryFn: usersApi.getApprovers,
   });
 
   const selectMutation = useMutation({
@@ -32,10 +38,12 @@ export default function QuotationComparePage() {
   });
 
   const approvalMutation = useMutation({
-    mutationFn: (qId) => approvalsApi.create({ quotation_id: qId, approver_id: user?.id }),
-    onSuccess: () => { toast.success('Approval requested!'); navigate('/approvals'); },
+    mutationFn: ({ quotationId, approverId }) => approvalsApi.create({ quotation_id: quotationId, approver_id: approverId }),
+    onSuccess: () => { toast.success('Approval requested!'); setApprovalDialog({ open: false, quotationId: null, approverId: '' }); navigate('/approvals'); },
     onError: (e) => toast.error(e.response?.data?.detail || 'Failed'),
   });
+
+  const approvers = (users || []).filter(u => u.is_active && ['approver', 'admin'].includes(u.role));
 
   if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}><CircularProgress /></Box>;
 
@@ -112,7 +120,7 @@ export default function QuotationComparePage() {
                           onClick={() => selectMutation.mutate(q.id)} sx={{ fontSize: '0.7rem', borderColor: '#10b981', color: '#10b981' }}>Select</Button>
                       )}
                       <Button size="small" variant="outlined" color="primary" startIcon={<Gavel />}
-                        onClick={() => approvalMutation.mutate(q.id)} sx={{ fontSize: '0.7rem' }}>Request Approval</Button>
+                        onClick={() => setApprovalDialog({ open: true, quotationId: q.id, approverId: approvers[0]?.id || '' })} sx={{ fontSize: '0.7rem' }}>Request Approval</Button>
                     </Box>
                   </CardContent>
                 </Card>
@@ -162,6 +170,36 @@ export default function QuotationComparePage() {
           </Card>
         </Grid>
       </Grid>
+
+      <Dialog open={approvalDialog.open} onClose={() => setApprovalDialog({ open: false, quotationId: null, approverId: '' })} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ fontWeight: 700 }}>Request Approval</DialogTitle>
+        <DialogContent sx={{ pt: 1 }}>
+          <TextField
+            select
+            fullWidth
+            label="Approver"
+            value={approvalDialog.approverId}
+            onChange={(e) => setApprovalDialog({ ...approvalDialog, approverId: e.target.value })}
+          >
+            {approvers.map(approver => (
+              <MenuItem key={approver.id} value={approver.id}>
+                {approver.full_name} ({approver.role.replace('_', ' ')})
+              </MenuItem>
+            ))}
+          </TextField>
+          {approvers.length === 0 && <Typography variant="body2" sx={{ color: 'error.main', mt: 1 }}>No active approvers found. Add or activate an approver user first.</Typography>}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button onClick={() => setApprovalDialog({ open: false, quotationId: null, approverId: '' })} sx={{ color: 'text.secondary' }}>Cancel</Button>
+          <Button
+            variant="contained"
+            disabled={!approvalDialog.approverId || approvalMutation.isPending}
+            onClick={() => approvalMutation.mutate({ quotationId: approvalDialog.quotationId, approverId: approvalDialog.approverId })}
+          >
+            {approvalMutation.isPending ? <CircularProgress size={18} color="inherit" /> : 'Send Request'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

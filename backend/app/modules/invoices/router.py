@@ -76,7 +76,7 @@ def send_invoice_email(
     current_user: dict = Depends(get_current_user),
 ):
     service = InvoiceService(db)
-    result = service.send_email(invoice_id, data.recipient_email)
+    result = service.send_email(invoice_id, data.recipient_email, current_user_id=current_user["id"])
     return result
 
 
