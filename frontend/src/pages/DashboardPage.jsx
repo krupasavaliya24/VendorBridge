@@ -87,17 +87,14 @@ export default function DashboardPage() {
     retry: false,
   });
 
-  const trendData = trends || [
-    { month: 'Jan', spend: 45000 }, { month: 'Feb', spend: 52000 }, { month: 'Mar', spend: 48000 },
-    { month: 'Apr', spend: 61000 }, { month: 'May', spend: 55000 }, { month: 'Jun', spend: 67000 },
-  ];
+  const trendData = trends || [];
 
   const getDisplayValue = (key, stats) => {
-    if (isLoading || !stats) {
-      if (key === 'active_rfqs') return '12';
-      if (key === 'pending_approvals') return '5';
-      if (key === 'pos_this_month') return '₹2.3L';
-      if (key === 'overdue_invoices') return '3';
+    if (isLoading) {
+      return '...';
+    }
+    if (!stats) {
+      if (key === 'pos_this_month') return '₹0';
       return '0';
     }
     if (key === 'active_rfqs') return stats.active_rfqs ?? '0';
@@ -115,15 +112,9 @@ export default function DashboardPage() {
     return '0';
   };
 
-  const fallbackPOs = [
-    { po_number: 'Po1', vendor: 'Infra', amount: '₹87,000', status: 'Approved' },
-    { po_number: 'Po2', vendor: 'Tech core', amount: '₹140,000', status: 'Pending' },
-    { po_number: 'Po3', vendor: 'OfficeNeed Co', amount: '₹34,900', status: 'draft' },
-  ];
-
   const recentPOs = React.useMemo(() => {
-    if (!poResponse || !poResponse.items || poResponse.items.length === 0) {
-      return fallbackPOs;
+    if (!poResponse || !poResponse.items) {
+      return [];
     }
     return poResponse.items.slice(0, 3).map((po, index) => ({
       po_number: po.po_number,
@@ -182,26 +173,34 @@ export default function DashboardPage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {recentPOs.map((po, index) => (
-                      <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell sx={{ fontWeight: 700, color: 'primary.dark', py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
-                          {po.po_number}
-                        </TableCell>
-                        <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.vendor}</TableCell>
-                        <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.amount}</TableCell>
-                        <TableCell sx={{ py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
-                          <Chip 
-                            label={po.status} 
-                            size="small" 
-                            color={
-                              po.status.toLowerCase() === 'approved' || po.status.toLowerCase() === 'completed' || po.status.toLowerCase() === 'issued' ? 'success' :
-                              po.status.toLowerCase() === 'pending' || po.status.toLowerCase() === 'in_progress' ? 'warning' : 'default'
-                            } 
-                            sx={{ fontWeight: 600, textTransform: 'capitalize', fontSize: '0.72rem' }} 
-                          />
+                    {recentPOs.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary', fontWeight: 500 }}>
+                          No recent purchase orders
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      recentPOs.map((po, index) => (
+                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableCell sx={{ fontWeight: 700, color: 'primary.dark', py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
+                            {po.po_number}
+                          </TableCell>
+                          <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.vendor}</TableCell>
+                          <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.amount}</TableCell>
+                          <TableCell sx={{ py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
+                            <Chip 
+                              label={po.status} 
+                              size="small" 
+                              color={
+                                po.status.toLowerCase() === 'approved' || po.status.toLowerCase() === 'completed' || po.status.toLowerCase() === 'issued' ? 'success' :
+                                po.status.toLowerCase() === 'pending' || po.status.toLowerCase() === 'in_progress' ? 'warning' : 'default'
+                              } 
+                              sx={{ fontWeight: 600, textTransform: 'capitalize', fontSize: '0.72rem' }} 
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
