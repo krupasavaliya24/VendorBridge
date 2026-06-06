@@ -37,11 +37,6 @@ export function AuthProvider({ children }) {
 
   const signup = useCallback(async ({ full_name, email, password, role }) => {
     const data = await authApi.signup({ full_name, email, password, role });
-    localStorage.setItem('vb_access_token', data.tokens.access_token);
-    if (data.tokens.refresh_token) {
-      localStorage.setItem('vb_refresh_token', data.tokens.refresh_token);
-    }
-    setUser(data.user);
     return data;
   }, []);
 

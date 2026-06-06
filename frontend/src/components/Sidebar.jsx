@@ -30,8 +30,8 @@ const MENU_ITEMS = [
   { text: 'Approvals', icon: <GavelIcon />, path: '/approvals', roles: ['admin', 'procurement_manager', 'approver'] },
   { text: 'Purchase Orders', icon: <ShippingIcon />, path: '/purchase-orders', roles: ['admin', 'procurement_manager', 'vendor'] },
   { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices', roles: ['admin', 'procurement_manager', 'vendor'] },
-  { text: 'Activity', icon: <TimelineIcon />, path: '/activity', roles: ['admin', 'procurement_manager'] },
   { text: 'Reports', icon: <BarChartIcon />, path: '/reports', roles: ['admin', 'procurement_manager', 'approver'] },
+  { text: 'Activity', icon: <TimelineIcon />, path: '/activity', roles: ['admin', 'procurement_manager'] },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings', roles: ['admin'] },
 ];
 
@@ -39,6 +39,12 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+
+  const getDisplayText = (text) => {
+    if (text === 'RFQs') return "- RFQ's";
+    if (text === 'Purchase Orders') return "- Purchase orders";
+    return `- ${text}`;
+  };
 
   const filteredItems = MENU_ITEMS.filter(item => !user?.role || item.roles.includes(user.role));
   const currentWidth = collapsed && !isMobile ? collapsedWidth : drawerWidth;
@@ -108,28 +114,36 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
                   px: collapsed && !isMobile ? 1.5 : 2,
                   justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
                   ...(active && {
-                    bgcolor: (t) => alpha(t.palette.primary.main, 0.08),
-                    '&:hover': { bgcolor: (t) => alpha(t.palette.primary.main, 0.12) },
-                    '& .MuiListItemIcon-root': { color: 'primary.main' },
-                    '& .MuiListItemText-primary': { color: 'primary.main', fontWeight: 600 },
-                    '&::before': {
-                      content: '""', position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
-                      width: 3, height: 24, borderRadius: 4,
-                      bgcolor: 'primary.main',
-                    },
+                    bgcolor: 'primary.main',
+                    color: '#ffffff',
+                    '&:hover': { bgcolor: 'primary.dark' },
+                    '& .MuiListItemIcon-root': { color: '#ffffff' },
+                    '& .MuiListItemText-primary': { color: '#ffffff', fontWeight: 600 },
+                  }),
+                  ...(!active && {
+                    color: 'text.primary',
+                    '&:hover': { bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08), color: 'text.primary' },
                   }),
                 }}
               >
-                <ListItemIcon sx={{
-                  minWidth: collapsed && !isMobile ? 0 : 40,
-                  justifyContent: 'center',
-                  color: active ? 'primary.main' : 'text.secondary',
-                  mr: collapsed && !isMobile ? 0 : 1,
-                }}>
-                  {item.icon}
-                </ListItemIcon>
+                {collapsed && !isMobile ? (
+                  <ListItemIcon sx={{
+                    minWidth: 0,
+                    justifyContent: 'center',
+                    color: active ? '#ffffff' : 'text.secondary',
+                  }}>
+                    {item.icon}
+                  </ListItemIcon>
+                ) : null}
                 {(!collapsed || isMobile) && (
-                  <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: active ? 600 : 400 }} />
+                  <ListItemText 
+                    primary={getDisplayText(item.text)} 
+                    primaryTypographyProps={{ 
+                      fontSize: '0.95rem', 
+                      fontWeight: active ? 600 : 500,
+                      color: active ? '#ffffff' : 'inherit',
+                    }} 
+                  />
                 )}
               </ListItemButton>
             </ListItem>
@@ -181,7 +195,7 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', bgcolor: 'background.default', borderRight: (t) => `1px solid ${t.palette.divider}` },
+            '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', bgcolor: 'secondary.main', borderRight: (t) => `1px solid ${t.palette.divider}` },
           }}
         >
           {drawerContent}
@@ -196,7 +210,7 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
             '& .MuiDrawer-paper': {
               width: currentWidth,
               boxSizing: 'border-box',
-              bgcolor: 'background.default',
+              bgcolor: 'secondary.main',
               borderRight: (t) => `1px solid ${t.palette.divider}`,
               transition: 'width 0.3s ease',
               overflowX: 'hidden',

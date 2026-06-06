@@ -112,8 +112,8 @@ export default function SignupPage() {
     setLoading(true);
     try {
       await signup({ full_name: form.full_name, email: form.email, password: form.password, role: form.role });
-      toast.success('Account created successfully!');
-      navigate('/');
+      toast.success('Account created successfully! Please login.');
+      navigate('/login');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Signup failed. Please try again.');
     } finally {
