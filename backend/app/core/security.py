@@ -63,7 +63,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     })
     
     # Returns an optimized encoded token string directly
-    return jwt.encode(header, claims, _SECRET_KEY).decode('utf-8')
+    return jwt.encode(header, claims, _SECRET_KEY)
 
 
 def create_refresh_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -80,7 +80,7 @@ def create_refresh_token(data: dict, expires_delta: Optional[timedelta] = None) 
         "type": "refresh"
     })
     
-    return jwt.encode(header, claims, _SECRET_KEY).decode('utf-8')
+    return jwt.encode(header, claims, _SECRET_KEY)
 
 
 def verify_token(token: str, token_type: str = "access") -> dict:

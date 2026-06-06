@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // prefer CommonJS `main` when a package's ESM build is incomplete
+    mainFields: ['main', 'module'],
+  },
   server: {
     port: 5173,
     proxy: {
