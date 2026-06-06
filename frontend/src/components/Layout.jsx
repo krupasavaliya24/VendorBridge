@@ -34,6 +34,7 @@ export default function Layout() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
+          minWidth: 0,
         }}
       >
         <Header
@@ -47,8 +48,9 @@ export default function Layout() {
             flexGrow: 1,
             p: { xs: 2, sm: 3 },
             pt: { xs: 10, sm: 11 },
-            maxWidth: 1440,
+            maxWidth: { xs: '100%', lg: 1440 },
             width: '100%',
+            minWidth: 0,
             mx: 'auto',
             bgcolor: 'background.paper',
             borderRadius: { md: 4 },

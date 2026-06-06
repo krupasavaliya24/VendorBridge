@@ -120,7 +120,7 @@ export default function Sidebar({ drawerWidth, collapsedWidth, collapsed, onTogg
                   }),
                   ...(!active && {
                     color: 'text.primary',
-                    '&:hover': { bgcolor: alpha(t.palette.primary.main, 0.08), color: 'text.primary' },
+                    '&:hover': { bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08), color: 'text.primary' },
                   }),
                 }}
               >

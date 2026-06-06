@@ -3,7 +3,7 @@ import { createTheme, alpha } from "@mui/material/styles";
 const WARM_TAUPE = "#bda998"; // Warm Taupe (Soft brown-beige main outer background)
 const LINEN_WHITE = "#faf6f0"; // Linen / Bone White (Main content area)
 const SAGE_GREEN = "#8fa89b"; // Sage Green (Sidebar & Panels background)
-const OLIVE_GREEN = "#38463c"; // Olive Green (Darker green used for cards/panels)
+const MAUVE = "#E0B0FF"; // Classic Light Mauve (Replaced OLIVE_GREEN)
 const AMBER_ACTIVE = "#d97706"; // Amber (Active / Selected menu & button highlight)
 const CHARCOAL_BLACK = "#212121"; // Charcoal Black (Primary text)
 const CHARCOAL_MUTED = "#545454"; // Charcoal Muted (Secondary text)
@@ -39,10 +39,10 @@ const theme = createTheme({
       dark: "#9333EA",
     },
     info: {
-      main: OLIVE_GREEN,
-      light: "#4a5b4e",
-      dark: "#273129",
-      contrastText: "#ffffff",
+      main: MAUVE,
+      light: "#f0d8ff",
+      dark: "#b38cc7",
+      contrastText: CHARCOAL_BLACK,
     },
     success: {
       main: "#10b981",
@@ -154,15 +154,15 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          background: OLIVE_GREEN,
-          color: LINEN_WHITE,
+          background: MAUVE,
+          color: CHARCOAL_BLACK,
           border: `1px solid ${alpha(BORDER, 0.3)}`,
           borderRadius: 16,
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
           transition: "all 0.2s ease",
           "&:hover": {
-            borderColor: SAGE_GREEN,
-            boxShadow: "0 8px 30px rgba(0, 0, 0, 0.12)",
+            borderColor: "#b38cc7",
+            boxShadow: `0 8px 30px ${alpha(MAUVE, 0.25)}`,
           },
         },
       },
@@ -243,6 +243,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          overflowX: "auto",
+          width: "100%",
+          maxWidth: "100%",
+        },
+      },
+    },
     MuiDataGrid: {
       styleOverrides: {
         root: {
@@ -250,6 +259,7 @@ const theme = createTheme({
           borderRadius: 12,
           backgroundColor: LINEN_WHITE,
           color: CHARCOAL_BLACK,
+          maxWidth: "100%",
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: alpha(WARM_TAUPE, 0.2),
             borderBottom: `1px solid ${BORDER}`,

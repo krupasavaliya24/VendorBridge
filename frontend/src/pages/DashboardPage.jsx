@@ -26,7 +26,7 @@ function StatCard({ title, value, loading }) {
     <Card sx={{ 
       height: '100%', 
       bgcolor: 'info.main',
-      color: '#faf6f0',
+      color: 'text.primary',
       borderColor: alpha('#dfdcd6', 0.2),
       borderWidth: 1,
       borderStyle: 'solid',
@@ -41,13 +41,13 @@ function StatCard({ title, value, loading }) {
     }}>
       <CardContent sx={{ p: '24px !important', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {loading ? (
-          <Skeleton width={60} height={48} sx={{ mb: 1, bgcolor: alpha('#faf6f0', 0.25) }} />
+          <Skeleton width={60} height={48} sx={{ mb: 1, bgcolor: alpha('#000000', 0.08) }} />
         ) : (
           <Typography variant="h3" sx={{ fontWeight: 800, color: 'inherit', mb: 1, textAlign: 'center', fontSize: '2rem' }}>
             {value}
           </Typography>
         )}
-        <Typography variant="body2" sx={{ color: alpha('#faf6f0', 0.8), fontWeight: 600, textAlign: 'center', fontSize: '0.85rem', textTransform: 'none' }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600, textAlign: 'center', fontSize: '0.85rem', textTransform: 'none' }}>
           {title}
         </Typography>
       </CardContent>
@@ -59,8 +59,8 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
     <Box sx={{ bgcolor: 'info.main', border: (t) => `1px solid ${alpha('#dfdcd6', 0.3)}`, borderRadius: 2, px: 2, py: 1.5, boxShadow: (t) => t.shadows[2] }}>
-      <Typography variant="caption" sx={{ color: alpha('#faf6f0', 0.7) }}>{label}</Typography>
-      <Typography variant="body2" sx={{ fontWeight: 600, color: '#faf6f0' }}>₹{payload[0].value?.toLocaleString()}</Typography>
+      <Typography variant="caption" sx={{ color: 'text.secondary' }}>{label}</Typography>
+      <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>₹{payload[0].value?.toLocaleString()}</Typography>
     </Box>
   );
 };
@@ -166,30 +166,30 @@ export default function DashboardPage() {
       <Grid container spacing={3}>
         {/* Recent Purchase Orders (Left) */}
         <Grid item xs={12} md={7}>
-          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'info.main', color: '#faf6f0' }}>
-            <CardContent sx={{ p: 3, flexGrow: 1 }}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'info.main', color: 'text.primary' }}>
+            <CardContent sx={{ p: 3, flexGrow: 1, minWidth: 0 }}>
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'inherit' }}>
                 Recent Purchase Orders
               </Typography>
-              <TableContainer>
+              <TableContainer sx={{ maxWidth: '100%', overflowX: 'auto' }}>
                 <Table sx={{ minWidth: 400 }}>
                   <TableHead>
-                    <TableRow sx={{ bgcolor: alpha('#faf6f0', 0.08) }}>
-                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>PO#</TableCell>
-                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>Vendor</TableCell>
-                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>Amount</TableCell>
-                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>Status</TableCell>
+                    <TableRow sx={{ bgcolor: alpha('#000000', 0.04) }}>
+                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: 'text.secondary', borderBottomColor: alpha('#000000', 0.08) }}>PO#</TableCell>
+                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: 'text.secondary', borderBottomColor: alpha('#000000', 0.08) }}>Vendor</TableCell>
+                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: 'text.secondary', borderBottomColor: alpha('#000000', 0.08) }}>Amount</TableCell>
+                      <TableCell sx={{ fontWeight: 600, py: 1.5, color: 'text.secondary', borderBottomColor: alpha('#000000', 0.08) }}>Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {recentPOs.map((po, index) => (
                       <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                        <TableCell sx={{ fontWeight: 600, color: 'primary.light', py: 1.5, borderBottomColor: alpha('#dfdcd6', 0.15) }}>
+                        <TableCell sx={{ fontWeight: 700, color: 'primary.dark', py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
                           {po.po_number}
                         </TableCell>
-                        <TableCell sx={{ py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>{po.vendor}</TableCell>
-                        <TableCell sx={{ py: 1.5, color: '#faf6f0', borderBottomColor: alpha('#dfdcd6', 0.15) }}>{po.amount}</TableCell>
-                        <TableCell sx={{ py: 1.5, borderBottomColor: alpha('#dfdcd6', 0.15) }}>
+                        <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.vendor}</TableCell>
+                        <TableCell sx={{ py: 1.5, color: 'text.primary', borderBottomColor: alpha('#000000', 0.08) }}>{po.amount}</TableCell>
+                        <TableCell sx={{ py: 1.5, borderBottomColor: alpha('#000000', 0.08) }}>
                           <Chip 
                             label={po.status} 
                             size="small" 
@@ -211,7 +211,7 @@ export default function DashboardPage() {
 
         {/* Spending Trends (Right) */}
         <Grid item xs={12} md={5}>
-          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'info.main', color: '#faf6f0' }}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'info.main', color: 'text.primary' }}>
             <CardContent sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: 'inherit' }}>
                 Spending Trends last 6 months
@@ -219,9 +219,9 @@ export default function DashboardPage() {
               <Box sx={{ width: '100%', height: 240, mt: 'auto' }}>
                 <ResponsiveContainer>
                   <BarChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={alpha('#faf6f0', 0.15)} />
-                    <XAxis dataKey="month" stroke="#faf6f0" fontSize={11} />
-                    <YAxis stroke="#faf6f0" fontSize={11} tickFormatter={(v) => `₹${(v/1000)}k`} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={alpha('#000000', 0.1)} />
+                    <XAxis dataKey="month" stroke="#545454" fontSize={11} />
+                    <YAxis stroke="#545454" fontSize={11} tickFormatter={(v) => `₹${(v/1000)}k`} />
                     <RTooltip content={<CustomTooltip />} />
                     <Bar dataKey="spend" fill="#d97706" radius={[4, 4, 0, 0]} />
                   </BarChart>
