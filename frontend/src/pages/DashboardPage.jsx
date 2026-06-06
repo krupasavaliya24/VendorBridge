@@ -237,7 +237,7 @@ export default function DashboardPage() {
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', flexWrap: 'wrap', mb: 2 }}>
         <Button 
-          variant="outlined" 
+          variant="contained" 
           color="primary" 
           startIcon={<AddIcon />} 
           onClick={() => navigate('/rfqs/new')}
@@ -246,7 +246,7 @@ export default function DashboardPage() {
           + new RFQ
         </Button>
         <Button 
-          variant="outlined" 
+          variant="contained" 
           color="primary" 
           onClick={() => navigate('/vendors')}
           sx={{ borderRadius: 3, px: 3, py: 1 }}
@@ -254,7 +254,7 @@ export default function DashboardPage() {
           Add Vendor
         </Button>
         <Button 
-          variant="outlined" 
+          variant="contained" 
           color="primary" 
           onClick={() => navigate('/invoices')}
           sx={{ borderRadius: 3, px: 3, py: 1 }}
