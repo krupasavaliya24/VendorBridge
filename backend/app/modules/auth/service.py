@@ -14,6 +14,7 @@ from app.modules.auth.models import User, PasswordResetToken
 from app.modules.auth.repository import UserRepository
 from app.modules.auth.schemas import SignupRequest, LoginRequest, UserUpdateRequest
 from app.modules.settings.service import SettingsService
+from app.shared.enums import UserRole
 
 
 class AuthService:
@@ -35,6 +36,21 @@ class AuthService:
             role=data.role,
         )
         user = self.repo.create(user)
+
+        if user.role == UserRole.VENDOR:
+            from app.modules.vendors.models import Vendor
+            from app.shared.enums import VendorStatus
+            import random
+            vendor = Vendor(
+                id=user.id,
+                vendor_code=f"VND-{random.randint(1000, 9999)}",
+                name=user.full_name,
+                email=user.email,
+                status=VendorStatus.ACTIVE,
+                created_by=user.id
+            )
+            self.db.add(vendor)
+            self.db.commit()
 
         tokens = self._generate_tokens(user)
         return {"user": user, "tokens": tokens}

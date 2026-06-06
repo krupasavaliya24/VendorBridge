@@ -13,7 +13,7 @@ router = APIRouter(prefix="/analytics", tags=["Analytics"])
 def get_dashboard(
     db: Session = Depends(get_db), 
     # FIXED: Corrected spelling to PROCUREMENT_MANAGER and removed list brackets []
-    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_MANAGER, UserRole.APPROVER))
+    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_OFFICER, UserRole.APPROVER))
 ):
     service = AnalyticsService(db)
     return service.get_dashboard_stats()
@@ -22,7 +22,7 @@ def get_dashboard(
 def get_trends(
     db: Session = Depends(get_db), 
     # FIXED: Corrected spelling to PROCUREMENT_MANAGER and removed list brackets []
-    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_MANAGER))
+    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_OFFICER))
 ):
     service = AnalyticsService(db)
     return service.get_trends()
@@ -31,7 +31,7 @@ def get_trends(
 def get_vendor_performance(
     db: Session = Depends(get_db), 
     # FIXED: Corrected spelling to PROCUREMENT_MANAGER and removed list brackets []
-    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_MANAGER))
+    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_OFFICER))
 ):
     service = AnalyticsService(db)
     return service.get_vendor_performance()

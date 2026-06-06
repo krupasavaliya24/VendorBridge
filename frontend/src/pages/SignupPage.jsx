@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 const ROLES = [
   { value: 'vendor', label: 'Vendor' },
-  { value: 'procurement_manager', label: 'Procurement Manager' },
+  { value: 'procurement_officer', label: 'Procurement Officer' },
   { value: 'approver', label: 'Approver' },
   { value: 'admin', label: 'Admin' },
 ];

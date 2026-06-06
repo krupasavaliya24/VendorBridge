@@ -79,7 +79,7 @@ def list_users(
 @router.get("/approvers", response_model=list[UserListResponse])
 def list_approvers(
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_role("admin", "procurement_manager")),
+    current_user: dict = Depends(require_role("admin", "procurement_officer")),
 ):
     service = AuthService(db)
     return [UserListResponse.model_validate(user) for user in service.list_approvers()]

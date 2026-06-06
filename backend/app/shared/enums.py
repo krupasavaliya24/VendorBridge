@@ -3,7 +3,7 @@ import enum
 
 class UserRole(str, enum.Enum):
     ADMIN = "admin"
-    PROCUREMENT_MANAGER = "procurement_manager"
+    PROCUREMENT_OFFICER = "procurement_officer"
     VENDOR = "vendor"
     APPROVER = "approver"
 

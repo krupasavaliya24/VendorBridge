@@ -69,19 +69,19 @@ export default function App() {
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<Protected><DashboardPage /></Protected>} />
           <Route path="users" element={<Protected roles={['admin']}><UsersPage /></Protected>} />
-          <Route path="vendors" element={<Protected roles={['admin', 'procurement_manager']}><VendorsPage /></Protected>} />
-          <Route path="rfqs" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><RFQsPage /></Protected>} />
-          <Route path="rfqs/new" element={<Protected roles={['admin', 'procurement_manager']}><RFQCreatePage /></Protected>} />
-          <Route path="rfqs/:id" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><RFQDetailPage /></Protected>} />
-          <Route path="quotations" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><QuotationsPage /></Protected>} />
+          <Route path="vendors" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager']}><VendorsPage /></Protected>} />
+          <Route path="rfqs" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><RFQsPage /></Protected>} />
+          <Route path="rfqs/new" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager']}><RFQCreatePage /></Protected>} />
+          <Route path="rfqs/:id" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><RFQDetailPage /></Protected>} />
+          <Route path="quotations" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><QuotationsPage /></Protected>} />
           <Route path="quotations/submit/:rfqId" element={<Protected roles={['vendor']}><QuotationSubmitPage /></Protected>} />
-          <Route path="quotations/compare/:rfqId" element={<Protected roles={['admin', 'procurement_manager']}><QuotationComparePage /></Protected>} />
-          <Route path="approvals" element={<Protected roles={['admin', 'procurement_manager', 'approver']}><ApprovalsPage /></Protected>} />
-          <Route path="purchase-orders" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><PurchaseOrdersPage /></Protected>} />
-          <Route path="invoices" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><InvoicesPage /></Protected>} />
-          <Route path="invoices/:id" element={<Protected roles={['admin', 'procurement_manager', 'vendor']}><InvoiceDetailPage /></Protected>} />
-          <Route path="activity" element={<Protected roles={['admin', 'procurement_manager']}><ActivityPage /></Protected>} />
-          <Route path="reports" element={<Protected roles={['admin', 'procurement_manager', 'approver']}><ReportsPage /></Protected>} />
+          <Route path="quotations/compare/:rfqId" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager']}><QuotationComparePage /></Protected>} />
+          <Route path="approvals" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'approver']}><ApprovalsPage /></Protected>} />
+          <Route path="purchase-orders" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><PurchaseOrdersPage /></Protected>} />
+          <Route path="invoices" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><InvoicesPage /></Protected>} />
+          <Route path="invoices/:id" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'vendor']}><InvoiceDetailPage /></Protected>} />
+          <Route path="activity" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager']}><ActivityPage /></Protected>} />
+          <Route path="reports" element={<Protected roles={['admin', 'procurement_officer', 'procurement_manager', 'approver']}><ReportsPage /></Protected>} />
           <Route path="settings" element={<Protected roles={['admin']}><SettingsPage /></Protected>} />
         </Route>
 

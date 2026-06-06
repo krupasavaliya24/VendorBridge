@@ -16,8 +16,7 @@ def get_activity_logs(
     page: int = Query(1, ge=1),
     size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
-    # FIXED: Replaced typo and removed the enclosing brackets [] to pass them as distinct positional arguments
-    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_MANAGER))
+    user=Depends(require_role(UserRole.ADMIN, UserRole.PROCUREMENT_OFFICER))
 ):
     service = ActivityLogService(db)
     query = service.get_logs(entity_type)

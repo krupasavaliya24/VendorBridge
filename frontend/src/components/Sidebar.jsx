@@ -22,16 +22,16 @@ import {
 import { useAuth } from '../hooks/useAuth';
 
 const MENU_ITEMS = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/', roles: ['admin', 'procurement_manager', 'vendor', 'approver'] },
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/', roles: ['admin', 'procurement_manager', 'procurement_officer', 'vendor', 'approver'] },
   { text: 'Users', icon: <ManageAccountsIcon />, path: '/users', roles: ['admin'] },
-  { text: 'Vendors', icon: <PeopleIcon />, path: '/vendors', roles: ['admin', 'procurement_manager'] },
-  { text: 'RFQs', icon: <DescriptionIcon />, path: '/rfqs', roles: ['admin', 'procurement_manager', 'vendor'] },
-  { text: 'Quotations', icon: <AssignmentIcon />, path: '/quotations', roles: ['admin', 'procurement_manager', 'vendor'] },
-  { text: 'Approvals', icon: <GavelIcon />, path: '/approvals', roles: ['admin', 'procurement_manager', 'approver'] },
-  { text: 'Purchase Orders', icon: <ShippingIcon />, path: '/purchase-orders', roles: ['admin', 'procurement_manager', 'vendor'] },
-  { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices', roles: ['admin', 'procurement_manager', 'vendor'] },
-  { text: 'Reports', icon: <BarChartIcon />, path: '/reports', roles: ['admin', 'procurement_manager', 'approver'] },
-  { text: 'Activity', icon: <TimelineIcon />, path: '/activity', roles: ['admin', 'procurement_manager'] },
+  { text: 'Vendors', icon: <PeopleIcon />, path: '/vendors', roles: ['admin', 'procurement_manager', 'procurement_officer'] },
+  { text: 'RFQs', icon: <DescriptionIcon />, path: '/rfqs', roles: ['admin', 'procurement_manager', 'procurement_officer', 'vendor'] },
+  { text: 'Quotations', icon: <AssignmentIcon />, path: '/quotations', roles: ['admin', 'procurement_manager', 'procurement_officer', 'vendor'] },
+  { text: 'Approvals', icon: <GavelIcon />, path: '/approvals', roles: ['admin', 'procurement_manager', 'procurement_officer', 'approver'] },
+  { text: 'Purchase Orders', icon: <ShippingIcon />, path: '/purchase-orders', roles: ['admin', 'procurement_manager', 'procurement_officer', 'vendor'] },
+  { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices', roles: ['admin', 'procurement_manager', 'procurement_officer', 'vendor'] },
+  { text: 'Reports', icon: <BarChartIcon />, path: '/reports', roles: ['admin', 'procurement_manager', 'procurement_officer', 'approver'] },
+  { text: 'Activity', icon: <TimelineIcon />, path: '/activity', roles: ['admin', 'procurement_manager', 'procurement_officer'] },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings', roles: ['admin'] },
 ];
 
