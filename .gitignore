@@ -89,4 +89,3 @@ Desktop.ini
 # Keep important project files tracked (examples):
 # - Do NOT ignore migration or schema files you intend to source-control
 # - Do NOT ignore package.json, requirements.txt, Pipfile, pyproject.toml, etc.
-/frontend/node_modules
