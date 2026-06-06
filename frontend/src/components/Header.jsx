@@ -149,7 +149,7 @@ export default function Header({ collapsed, onMobileToggle, isMobile }) {
         <IconButton onClick={(e) => setUserAnchor(e.currentTarget)} sx={{ p: 0.5 }}>
           <Avatar sx={{
             width: 34, height: 34,
-            background: 'linear-gradient(135deg, #8B1A1A, #A52A2A)',
+            bgcolor: 'primary.main',
             fontSize: '0.8rem', fontWeight: 700,
           }}>
             {getInitials(user?.full_name)}

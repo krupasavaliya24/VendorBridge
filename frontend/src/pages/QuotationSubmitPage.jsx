@@ -100,9 +100,9 @@ export default function QuotationSubmitPage() {
       </Card>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" size="large" startIcon={submitMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Send />}
+        <Button variant="contained" color="primary" size="large" startIcon={submitMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Send />}
           onClick={handleSubmit} disabled={submitMutation.isPending}
-          sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)', px: 4 }}>Submit Quotation</Button>
+          sx={{ px: 4 }}>Submit Quotation</Button>
       </Box>
     </Box>
   );

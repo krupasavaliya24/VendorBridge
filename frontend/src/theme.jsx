@@ -1,29 +1,29 @@
 import { createTheme, alpha } from '@mui/material/styles';
 
-const WINE_RED = '#8B1A1A';
-const WINE_LIGHT = '#A52A2A';
-const WINE_DARK = '#5C0A0A';
-const WINE_HOVER = '#9B2D2D';
+const BLUE_PRIMARY = '#1e40af';    // Blue 800 (Classic Navy/Blue)
+const BLUE_LIGHT = '#3b82f6';      // Blue 500 (Sky Blue)
+const BLUE_DARK = '#1e3a8a';       // Blue 900 (Deep Blue)
+const BLUE_HOVER = '#1d4ed8';      // Blue 700
 
 const EMERALD = '#10b981';
 const EMERALD_LIGHT = '#34d399';
 const EMERALD_DARK = '#059669';
 
-const BG_PRIMARY = '#0a0e17';
-const BG_SURFACE = '#0f1520';
-const BG_ELEVATED = '#151c2c';
-const BG_HOVER = '#1a2332';
+const BG_PRIMARY = '#f8fafc';      // Slate 50 (Very light grey/blue)
+const BG_SURFACE = '#ffffff';      // Pure White
+const BG_ELEVATED = '#f1f5f9';     // Slate 100 (Light grey)
+const BG_HOVER = '#e2e8f0';        // Slate 200 (Hover grey)
 
-const BORDER = '#1e293b';
-const BORDER_LIGHT = '#334155';
+const BORDER = '#e2e8f0';          // Slate 200 border
+const BORDER_LIGHT = '#cbd5e1';    // Slate 300 border
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: WINE_RED,
-      light: WINE_LIGHT,
-      dark: WINE_DARK,
+      main: BLUE_PRIMARY,
+      light: BLUE_LIGHT,
+      dark: BLUE_DARK,
       contrastText: '#ffffff',
     },
     secondary: {
@@ -57,29 +57,29 @@ const theme = createTheme({
       paper: BG_SURFACE,
     },
     text: {
-      primary: '#f1f5f9',
-      secondary: '#94a3b8',
-      disabled: '#64748b',
+      primary: '#0f172a',        // Slate 900
+      secondary: '#475569',      // Slate 600
+      disabled: '#94a3b8',       // Slate 400
     },
     divider: BORDER,
     action: {
-      hover: alpha('#ffffff', 0.05),
-      selected: alpha(WINE_RED, 0.15),
-      disabled: alpha('#ffffff', 0.3),
-      disabledBackground: alpha('#ffffff', 0.12),
+      hover: alpha(BLUE_PRIMARY, 0.04),
+      selected: alpha(BLUE_PRIMARY, 0.08),
+      disabled: alpha('#000000', 0.26),
+      disabledBackground: alpha('#000000', 0.12),
     },
   },
   typography: {
     fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    h1: { fontWeight: 800, letterSpacing: '-0.02em' },
-    h2: { fontWeight: 700, letterSpacing: '-0.01em' },
-    h3: { fontWeight: 700 },
-    h4: { fontWeight: 600 },
-    h5: { fontWeight: 600 },
-    h6: { fontWeight: 600 },
-    subtitle1: { fontWeight: 500, color: '#94a3b8' },
-    subtitle2: { fontWeight: 500, fontSize: '0.8rem', color: '#94a3b8' },
-    body2: { color: '#94a3b8' },
+    h1: { fontWeight: 800, letterSpacing: '-0.02em', color: '#0f172a' },
+    h2: { fontWeight: 700, letterSpacing: '-0.01em', color: '#0f172a' },
+    h3: { fontWeight: 700, color: '#0f172a' },
+    h4: { fontWeight: 600, color: '#0f172a' },
+    h5: { fontWeight: 600, color: '#0f172a' },
+    h6: { fontWeight: 600, color: '#0f172a' },
+    subtitle1: { fontWeight: 500, color: '#475569' },
+    subtitle2: { fontWeight: 500, fontSize: '0.8rem', color: '#64748b' },
+    body2: { color: '#475569' },
     button: { textTransform: 'none', fontWeight: 600, letterSpacing: '0.01em' },
     overline: { fontWeight: 600, letterSpacing: '0.08em', color: '#64748b' },
   },
@@ -88,16 +88,13 @@ const theme = createTheme({
   },
   shadows: [
     'none',
-    '0 1px 2px rgba(0,0,0,0.3)',
-    '0 2px 4px rgba(0,0,0,0.3)',
-    '0 4px 8px rgba(0,0,0,0.35)',
-    '0 4px 12px rgba(0,0,0,0.4)',
-    '0 6px 16px rgba(0,0,0,0.4)',
-    '0 8px 24px rgba(0,0,0,0.45)',
-    '0 8px 32px rgba(0,0,0,0.5)',
-    '0 12px 40px rgba(0,0,0,0.5)',
-    '0 16px 48px rgba(0,0,0,0.55)',
-    ...Array(15).fill('0 16px 48px rgba(0,0,0,0.6)'),
+    '0 1px 2px 0 rgba(15, 23, 42, 0.05)',
+    '0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08)',
+    '0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05)',
+    '0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -4px rgba(15, 23, 42, 0.05)',
+    '0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05)',
+    '0 25px 50px -12px rgba(15, 23, 42, 0.1)',
+    ...Array(18).fill('0 25px 50px -12px rgba(15, 23, 42, 0.1)'),
   ],
   components: {
     MuiCssBaseline: {
@@ -122,10 +119,10 @@ const theme = createTheme({
           transition: 'all 0.2s ease',
         },
         containedPrimary: {
-          background: `linear-gradient(135deg, ${WINE_RED} 0%, ${WINE_DARK} 100%)`,
+          background: `linear-gradient(135deg, ${BLUE_PRIMARY} 0%, ${BLUE_DARK} 100%)`,
           '&:hover': {
-            background: `linear-gradient(135deg, ${WINE_HOVER} 0%, ${WINE_RED} 100%)`,
-            boxShadow: `0 4px 16px ${alpha(WINE_RED, 0.4)}`,
+            background: `linear-gradient(135deg, ${BLUE_HOVER} 0%, ${BLUE_PRIMARY} 100%)`,
+            boxShadow: `0 4px 16px ${alpha(BLUE_PRIMARY, 0.35)}`,
             transform: 'translateY(-1px)',
           },
         },
@@ -133,29 +130,28 @@ const theme = createTheme({
           background: `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DARK} 100%)`,
           '&:hover': {
             background: `linear-gradient(135deg, ${EMERALD_LIGHT} 0%, ${EMERALD} 100%)`,
-            boxShadow: `0 4px 16px ${alpha(EMERALD, 0.4)}`,
+            boxShadow: `0 4px 16px ${alpha(EMERALD, 0.35)}`,
             transform: 'translateY(-1px)',
           },
         },
         outlined: {
           borderColor: BORDER_LIGHT,
-          '&:hover': { borderColor: WINE_RED, background: alpha(WINE_RED, 0.08) },
+          '&:hover': { borderColor: BLUE_PRIMARY, background: alpha(BLUE_PRIMARY, 0.04) },
         },
         text: {
-          '&:hover': { background: alpha('#ffffff', 0.05) },
+          '&:hover': { background: alpha(BLUE_PRIMARY, 0.04) },
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          background: alpha(BG_SURFACE, 0.8),
-          backdropFilter: 'blur(12px)',
-          border: `1px solid ${alpha(BORDER, 0.5)}`,
+          background: BG_SURFACE,
+          border: `1px solid ${BORDER}`,
           borderRadius: 16,
-          boxShadow: '0 4px 24px -4px rgba(0,0,0,0.4)',
+          boxShadow: '0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05)',
           transition: 'all 0.2s ease',
-          '&:hover': { borderColor: BORDER_LIGHT },
+          '&:hover': { borderColor: BORDER_LIGHT, boxShadow: '0 4px 6px -1px rgba(15, 23, 42, 0.08)' },
         },
       },
     },
@@ -167,7 +163,7 @@ const theme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: BG_PRIMARY,
+          backgroundColor: BG_SURFACE,
           borderRight: `1px solid ${BORDER}`,
         },
       },
@@ -175,10 +171,11 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: alpha(BG_PRIMARY, 0.85),
+          backgroundColor: alpha(BG_SURFACE, 0.95),
           backdropFilter: 'blur(16px)',
           borderBottom: `1px solid ${BORDER}`,
           boxShadow: 'none',
+          color: '#0f172a',
         },
       },
     },
@@ -188,12 +185,12 @@ const theme = createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 10,
-            backgroundColor: BG_ELEVATED,
+            backgroundColor: BG_PRIMARY,
             '& fieldset': { borderColor: BORDER },
             '&:hover fieldset': { borderColor: BORDER_LIGHT },
             '&.Mui-focused fieldset': {
-              borderColor: WINE_RED,
-              boxShadow: `0 0 0 3px ${alpha(WINE_RED, 0.15)}`,
+              borderColor: BLUE_PRIMARY,
+              boxShadow: `0 0 0 3px ${alpha(BLUE_PRIMARY, 0.15)}`,
             },
           },
         },
@@ -205,7 +202,7 @@ const theme = createTheme({
           backgroundColor: BG_SURFACE,
           border: `1px solid ${BORDER}`,
           borderRadius: 16,
-          boxShadow: '0 16px 48px rgba(0,0,0,0.6)',
+          boxShadow: '0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1)',
         },
       },
     },
@@ -219,14 +216,14 @@ const theme = createTheme({
         root: {
           textTransform: 'none',
           fontWeight: 500,
-          '&.Mui-selected': { color: WINE_RED, fontWeight: 600 },
+          '&.Mui-selected': { color: BLUE_PRIMARY, fontWeight: 600 },
         },
       },
     },
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: WINE_RED,
+          backgroundColor: BLUE_PRIMARY,
           height: 3,
           borderRadius: '3px 3px 0 0',
         },
@@ -245,7 +242,7 @@ const theme = createTheme({
             borderBottom: `1px solid ${alpha(BORDER, 0.5)}`,
           },
           '& .MuiDataGrid-row:hover': {
-            backgroundColor: alpha('#ffffff', 0.03),
+            backgroundColor: alpha(BLUE_PRIMARY, 0.03),
           },
           '& .MuiDataGrid-footerContainer': {
             borderTop: `1px solid ${BORDER}`,
@@ -262,15 +259,15 @@ const theme = createTheme({
           fontSize: '0.75rem',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
-          color: '#94a3b8',
+          color: '#475569',
         },
       },
     },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: BG_ELEVATED,
-          border: `1px solid ${BORDER}`,
+          backgroundColor: '#0f172a',
+          color: '#ffffff',
           borderRadius: 8,
           fontSize: '0.75rem',
         },
@@ -282,7 +279,7 @@ const theme = createTheme({
           backgroundColor: BG_SURFACE,
           border: `1px solid ${BORDER}`,
           borderRadius: 12,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.08)',
         },
       },
     },
@@ -300,10 +297,10 @@ const theme = createTheme({
         root: {
           borderRadius: 10,
           '&.Mui-selected': {
-            backgroundColor: alpha(WINE_RED, 0.15),
-            color: '#ffffff',
-            '&:hover': { backgroundColor: alpha(WINE_RED, 0.25) },
-            '& .MuiListItemIcon-root': { color: WINE_RED },
+            backgroundColor: alpha(BLUE_PRIMARY, 0.08),
+            color: BLUE_PRIMARY,
+            '&:hover': { backgroundColor: alpha(BLUE_PRIMARY, 0.12) },
+            '& .MuiListItemIcon-root': { color: BLUE_PRIMARY },
           },
         },
       },
@@ -316,7 +313,7 @@ const theme = createTheme({
     MuiStepper: {
       styleOverrides: {
         root: {
-          '& .MuiStepIcon-root.Mui-active': { color: WINE_RED },
+          '& .MuiStepIcon-root.Mui-active': { color: BLUE_PRIMARY },
           '& .MuiStepIcon-root.Mui-completed': { color: EMERALD },
         },
       },

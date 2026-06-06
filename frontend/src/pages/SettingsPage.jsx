@@ -76,9 +76,8 @@ export default function SettingsPage() {
             <CardContent sx={{ p: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>{TABS[tab].label} Settings</Typography>
-                <Button variant="contained" startIcon={saveMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Save />}
-                  onClick={handleSave} disabled={Object.keys(edits).length === 0 || saveMutation.isPending}
-                  sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' }}>
+                <Button variant="contained" color="primary" startIcon={saveMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Save />}
+                  onClick={handleSave} disabled={Object.keys(edits).length === 0 || saveMutation.isPending}>
                   Save Changes
                 </Button>
               </Box>

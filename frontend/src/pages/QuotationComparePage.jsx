@@ -12,7 +12,7 @@ import approvalsApi from '../api/approvals';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-const COLORS = ['#8B1A1A', '#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#ec4899'];
+const COLORS = ['#1e40af', '#3b82f6', '#10b981', '#f59e0b', '#a855f7', '#ec4899'];
 
 export default function QuotationComparePage() {
   const { rfqId } = useParams();
@@ -76,10 +76,10 @@ export default function QuotationComparePage() {
               <Box sx={{ height: 300 }}>
                 <ResponsiveContainer>
                   <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                     <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
                     <YAxis stroke="#64748b" fontSize={11} tickFormatter={v => `₹${(v / 1000)}k`} />
-                    <Tooltip contentStyle={{ background: '#151c2c', border: '1px solid #1e293b', borderRadius: 8 }} formatter={v => [`₹${v.toLocaleString()}`, 'Total']} />
+                    <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, color: '#0f172a' }} labelStyle={{ color: '#64748b' }} formatter={v => [`₹${v.toLocaleString()}`, 'Total']} />
                     <Bar dataKey="total" radius={[6, 6, 0, 0]}>
                       {chartData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                     </Bar>
@@ -111,8 +111,8 @@ export default function QuotationComparePage() {
                         <Button size="small" variant="outlined" startIcon={<CheckCircle />}
                           onClick={() => selectMutation.mutate(q.id)} sx={{ fontSize: '0.7rem', borderColor: '#10b981', color: '#10b981' }}>Select</Button>
                       )}
-                      <Button size="small" variant="outlined" startIcon={<Gavel />}
-                        onClick={() => approvalMutation.mutate(q.id)} sx={{ fontSize: '0.7rem', borderColor: '#8B1A1A', color: '#8B1A1A' }}>Request Approval</Button>
+                      <Button size="small" variant="outlined" color="primary" startIcon={<Gavel />}
+                        onClick={() => approvalMutation.mutate(q.id)} sx={{ fontSize: '0.7rem' }}>Request Approval</Button>
                     </Box>
                   </CardContent>
                 </Card>

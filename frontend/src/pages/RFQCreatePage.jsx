@@ -164,9 +164,9 @@ export default function RFQCreatePage() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
             <Button disabled={step === 0} onClick={handleBack} startIcon={<ArrowBack />}>Back</Button>
             {step < 3 ? (
-              <Button variant="contained" onClick={handleNext} endIcon={<ArrowForward />} sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' }}>Next</Button>
+              <Button variant="contained" color="primary" onClick={handleNext} endIcon={<ArrowForward />}>Next</Button>
             ) : (
-              <Button variant="contained" onClick={handleSubmit} startIcon={createMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Send />} disabled={createMutation.isPending} sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' }}>Submit RFQ</Button>
+              <Button variant="contained" color="primary" onClick={handleSubmit} startIcon={createMutation.isPending ? <CircularProgress size={18} color="inherit" /> : <Send />} disabled={createMutation.isPending}>Submit RFQ</Button>
             )}
           </Box>
         </CardContent>

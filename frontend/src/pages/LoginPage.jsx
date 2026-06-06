@@ -13,6 +13,7 @@ export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -20,19 +21,44 @@ export default function LoginPage() {
     if (isAuthenticated) navigate('/', { replace: true });
   }, [isAuthenticated, navigate]);
 
-  const validate = () => {
-    const errs = {};
-    if (!form.email) errs.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = 'Invalid email address';
-    if (!form.password) errs.password = 'Password is required';
-    else if (form.password.length < 6) errs.password = 'Password must be at least 6 characters';
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+  const validateField = (field, value) => {
+    let error = '';
+    if (field === 'email') {
+      if (!value) error = 'Email is required';
+      else if (!/\S+@\S+\.\S+/.test(value)) error = 'Invalid email address';
+    }
+    if (field === 'password') {
+      if (!value) error = 'Password is required';
+      else if (value.length < 6) error = 'Password must be at least 6 characters';
+    }
+    return error;
+  };
+
+  const handleBlur = (field) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    const error = validateField(field, form[field]);
+    setErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  const handleChange = (field) => (e) => {
+    const val = e.target.value;
+    setForm(prev => ({ ...prev, [field]: val }));
+    if (touched[field]) {
+      const error = validateField(field, val);
+      setErrors(prev => ({ ...prev, [field]: error }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    const emailErr = validateField('email', form.email);
+    const passwordErr = validateField('password', form.password);
+
+    if (emailErr || passwordErr) {
+      setErrors({ email: emailErr, password: passwordErr });
+      setTouched({ email: true, password: true });
+      return;
+    }
     setLoading(true);
     try {
       await login(form.email, form.password);
@@ -49,22 +75,22 @@ export default function LoginPage() {
   return (
     <Box sx={{
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      bgcolor: '#0a0e17', px: 2, py: 4,
-      background: 'radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.15) 0%, transparent 60%), #0a0e17',
+      bgcolor: 'background.default', px: 2, py: 4,
+      background: (t) => `radial-gradient(ellipse at 50% 0%, ${alpha(t.palette.primary.main, 0.12)} 0%, transparent 70%), ${t.palette.background.default}`,
     }}>
       <Card sx={{
         width: '100%', maxWidth: 440, position: 'relative', overflow: 'visible',
-        bgcolor: alpha('#0f1520', 0.9), backdropFilter: 'blur(20px)',
-        border: (t) => `1px solid ${alpha(t.palette.divider, 0.5)}`,
-        borderRadius: 4, boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
+        bgcolor: 'background.paper',
+        border: (t) => `1px solid ${alpha(t.palette.divider, 0.8)}`,
+        borderRadius: 4, boxShadow: (t) => t.shadows[4],
       }}>
         {/* Circular Avatar */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: -4 }}>
           <Avatar sx={{
             width: 72, height: 72,
-            background: 'linear-gradient(135deg, #8B1A1A 0%, #5C0A0A 100%)',
-            boxShadow: '0 8px 24px rgba(139,26,26,0.4)',
-            border: '4px solid #0f1520',
+            background: (t) => `linear-gradient(135deg, ${t.palette.primary.main} 0%, ${t.palette.primary.dark} 100%)`,
+            boxShadow: (t) => `0 8px 24px ${alpha(t.palette.primary.main, 0.35)}`,
+            border: (t) => `4px solid ${t.palette.background.paper}`,
           }}>
             <LockOutlined sx={{ fontSize: 32 }} />
           </Avatar>
@@ -81,13 +107,15 @@ export default function LoginPage() {
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
             <TextField
               fullWidth label="Email Address" type="email" value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              onChange={handleChange('email')}
+              onBlur={() => handleBlur('email')}
               error={!!errors.email} helperText={errors.email}
               InputProps={{ startAdornment: <InputAdornment position="start"><EmailIcon sx={{ color: 'text.secondary', fontSize: 20 }} /></InputAdornment> }}
             />
             <TextField
               fullWidth label="Password" type={showPassword ? 'text' : 'password'} value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              onChange={handleChange('password')}
+              onBlur={() => handleBlur('password')}
               error={!!errors.password} helperText={errors.password}
               InputProps={{
                 startAdornment: <InputAdornment position="start"><LockIcon sx={{ color: 'text.secondary', fontSize: 20 }} /></InputAdornment>,
@@ -109,11 +137,7 @@ export default function LoginPage() {
 
             <Button
               type="submit" fullWidth variant="contained" size="large" disabled={loading}
-              sx={{
-                py: 1.4, fontSize: '0.95rem', fontWeight: 600, borderRadius: 3,
-                background: 'linear-gradient(135deg, #8B1A1A 0%, #5C0A0A 100%)',
-                '&:hover': { background: 'linear-gradient(135deg, #9B2D2D 0%, #8B1A1A 100%)', boxShadow: '0 6px 20px rgba(139,26,26,0.5)' },
-              }}
+              sx={{ py: 1.4, fontSize: '0.95rem', fontWeight: 600, borderRadius: 3 }}
             >
               {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign In'}
             </Button>

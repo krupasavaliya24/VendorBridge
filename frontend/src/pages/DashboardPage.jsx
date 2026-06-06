@@ -13,7 +13,7 @@ import { useAuth } from '../hooks/useAuth';
 import analyticsApi from '../api/analytics';
 
 const STAT_CARDS = [
-  { key: 'total_vendors', title: 'Total Vendors', icon: PeopleIcon, color: '#8B1A1A', gradient: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)' },
+  { key: 'total_vendors', title: 'Total Vendors', icon: PeopleIcon, color: '#1e40af', gradient: 'linear-gradient(135deg, #1e40af, #1e3a8a)' },
   { key: 'active_rfqs', title: 'Active RFQs', icon: RFQIcon, color: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
   { key: 'pending_approvals', title: 'Pending Approvals', icon: ApprovalIcon, color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
   { key: 'recent_invoices', title: 'Recent Invoices', icon: InvoiceIcon, color: '#10b981', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
@@ -42,9 +42,9 @@ function StatCard({ title, value, icon: Icon, gradient, color, loading }) {
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <Box sx={{ bgcolor: '#151c2c', border: '1px solid #1e293b', borderRadius: 2, px: 2, py: 1.5 }}>
-      <Typography variant="caption" sx={{ color: '#94a3b8' }}>{label}</Typography>
-      <Typography variant="body2" sx={{ fontWeight: 600, color: '#f1f5f9' }}>₹{payload[0].value?.toLocaleString()}</Typography>
+    <Box sx={{ bgcolor: 'background.paper', border: (t) => `1px solid ${t.palette.divider}`, borderRadius: 2, px: 2, py: 1.5, boxShadow: (t) => t.shadows[2] }}>
+      <Typography variant="caption" sx={{ color: 'text.secondary' }}>{label}</Typography>
+      <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>₹{payload[0].value?.toLocaleString()}</Typography>
     </Box>
   );
 };
@@ -86,12 +86,10 @@ export default function DashboardPage() {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1.5 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate('/rfqs/new')}
-            sx={{ background: 'linear-gradient(135deg, #8B1A1A, #5C0A0A)', '&:hover': { boxShadow: '0 4px 16px rgba(139,26,26,0.4)' } }}>
+          <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => navigate('/rfqs/new')}>
             Create RFQ
           </Button>
-          <Button variant="outlined" startIcon={<PeopleIcon />} onClick={() => navigate('/vendors')}
-            sx={{ borderColor: '#334155', color: '#f1f5f9', '&:hover': { borderColor: '#8B1A1A', bgcolor: alpha('#8B1A1A', 0.08) } }}>
+          <Button variant="outlined" color="primary" startIcon={<PeopleIcon />} onClick={() => navigate('/vendors')}>
             Add Vendor
           </Button>
         </Box>
@@ -123,11 +121,11 @@ export default function DashboardPage() {
               <Box sx={{ width: '100%', height: 300 }}>
                 <ResponsiveContainer>
                   <BarChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                     <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
                     <YAxis stroke="#64748b" fontSize={12} tickFormatter={(v) => `₹${(v/1000)}k`} />
                     <RTooltip content={<CustomTooltip />} />
-                    <Bar dataKey="spend" fill="#8B1A1A" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="spend" fill="#1e40af" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </Box>
@@ -141,8 +139,8 @@ export default function DashboardPage() {
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>Quick Summary</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: 3, bgcolor: alpha('#8B1A1A', 0.08), border: `1px solid ${alpha('#8B1A1A', 0.2)}` }}>
-                  <AttachMoney sx={{ color: '#8B1A1A' }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, borderRadius: 3, bgcolor: (t) => alpha(t.palette.primary.main, 0.08), border: (t) => `1px solid ${alpha(t.palette.primary.main, 0.2)}` }}>
+                  <AttachMoney sx={{ color: 'primary.main' }} />
                   <Box>
                     <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.75rem' }}>Total PO Value</Typography>
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>₹{(stats?.total_po_value || 0).toLocaleString()}</Typography>

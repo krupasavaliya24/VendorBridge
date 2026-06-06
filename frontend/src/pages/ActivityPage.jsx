@@ -8,7 +8,7 @@ import activityLogsApi from '../api/activityLogs';
 import { format } from 'date-fns';
 
 const ENTITY_TYPES = ['', 'vendor', 'rfq', 'quotation', 'approval', 'purchase_order', 'invoice'];
-const ENTITY_COLORS = { vendor: '#8B1A1A', rfq: '#3b82f6', quotation: '#f59e0b', approval: '#10b981', purchase_order: '#a855f7', invoice: '#ec4899' };
+const ENTITY_COLORS = { vendor: '#1e40af', rfq: '#3b82f6', quotation: '#f59e0b', approval: '#10b981', purchase_order: '#a855f7', invoice: '#ec4899' };
 
 export default function ActivityPage() {
   const [entityType, setEntityType] = useState('');
